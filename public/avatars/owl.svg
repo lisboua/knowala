@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120">
+  <circle cx="60" cy="60" r="60" fill="#80CBC4"/>
+  <ellipse cx="60" cy="88" rx="24" ry="20" fill="#5C3D2A" stroke="#3E2723" stroke-width="1.5"/>
+  <ellipse cx="60" cy="88" rx="18" ry="16" fill="#D2B48C"/>
+  <ellipse cx="28" cy="75" rx="14" ry="22" fill="#5C3D2A" stroke="#3E2723" stroke-width="1" transform="rotate(-10 28 75)"/>
+  <ellipse cx="92" cy="75" rx="14" ry="22" fill="#5C3D2A" stroke="#3E2723" stroke-width="1" transform="rotate(10 92 75)"/>
+  <ellipse cx="60" cy="46" rx="26" ry="24" fill="#8B5E3C" stroke="#5C3D2A" stroke-width="1.5"/>
+  <polygon points="36,18 42,36 30,34" fill="#5C3D2A"/>
+  <polygon points="84,18 78,36 90,34" fill="#5C3D2A"/>
+  <ellipse cx="60" cy="48" rx="20" ry="18" fill="#F5DEB3"/>
+  <circle cx="50" cy="44" r="10" fill="white"/>
+  <circle cx="70" cy="44" r="10" fill="white"/>
+  <circle cx="51" cy="44" r="5.5" fill="#2D1B00"/>
+  <circle cx="71" cy="44" r="5.5" fill="#2D1B00"/>
+  <circle cx="52.5" cy="42.5" r="2" fill="white"/>
+  <circle cx="72.5" cy="42.5" r="2" fill="white"/>
+  <polygon points="60,52 55,60 65,60" fill="#FF9800"/>
+  <ellipse cx="50" cy="106" rx="6" ry="3" fill="#FF9800"/>
+  <ellipse cx="70" cy="106" rx="6" ry="3" fill="#FF9800"/>
+</svg>

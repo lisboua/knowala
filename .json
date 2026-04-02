@@ -1,0 +1,697 @@
+{,…}
+summary
+: 
+[{tableName: "dbo.Account", totalFields: 14, mappedFields: 1, unmappedFields: 13, doNotMigrate: 0,…},…]
+[0 … 99]
+0
+: 
+{tableName: "dbo.Account", totalFields: 14, mappedFields: 1, unmappedFields: 13, doNotMigrate: 0,…}
+1
+: 
+{tableName: "dbo.AccountTransfer", totalFields: 9, mappedFields: 0, unmappedFields: 9, doNotMigrate: 0,…}
+2
+: 
+{tableName: "dbo.Additional", totalFields: 45, mappedFields: 0, unmappedFields: 45, doNotMigrate: 0,…}
+3
+: 
+{tableName: "dbo.AdditionalBranchOffices", totalFields: 2, mappedFields: 0, unmappedFields: 2,…}
+4
+: 
+{tableName: "dbo.AdditionalValidUserRoles", totalFields: 2, mappedFields: 0, unmappedFields: 2,…}
+5
+: 
+{tableName: "dbo.Addresses", totalFields: 9, mappedFields: 0, unmappedFields: 9, doNotMigrate: 0,…}
+6
+: 
+{tableName: "dbo.AppProtocolResponses", totalFields: 5, mappedFields: 0, unmappedFields: 5,…}
+7
+: 
+{tableName: "dbo.AppProtocols", totalFields: 11, mappedFields: 0, unmappedFields: 11, doNotMigrate: 0,…}
+8
+: 
+{tableName: "dbo.ArticleCategories", totalFields: 10, mappedFields: 0, unmappedFields: 10,…}
+9
+: 
+{tableName: "dbo.Articles", totalFields: 17, mappedFields: 0, unmappedFields: 17, doNotMigrate: 0,…}
+10
+: 
+{tableName: "dbo.Booking", totalFields: 94, mappedFields: 0, unmappedFields: 94, doNotMigrate: 0,…}
+11
+: 
+{tableName: "dbo.BookingAdditional", totalFields: 5, mappedFields: 0, unmappedFields: 5,…}
+12
+: 
+{tableName: "dbo.BookingAttributes", totalFields: 3, mappedFields: 0, unmappedFields: 3,…}
+13
+: 
+{tableName: "dbo.BookingBrandBranchOffices", totalFields: 2, mappedFields: 0, unmappedFields: 2,…}
+14
+: 
+{tableName: "dbo.BookingBrands", totalFields: 11, mappedFields: 0, unmappedFields: 11, doNotMigrate: 0,…}
+15
+: 
+{tableName: "dbo.BookingCancellationTypes", totalFields: 10, mappedFields: 0, unmappedFields: 10,…}
+16
+: 
+{tableName: "dbo.BookingDrivers", totalFields: 2, mappedFields: 0, unmappedFields: 2, doNotMigrate: 0,…}
+17
+: 
+{tableName: "dbo.BookingFiles", totalFields: 2, mappedFields: 0, unmappedFields: 2, doNotMigrate: 0,…}
+18
+: 
+{tableName: "dbo.BookingFranchiseInformation", totalFields: 33, mappedFields: 0, unmappedFields: 33,…}
+19
+: 
+{tableName: "dbo.BookingFranchiseInformationRenewal", totalFields: 7, mappedFields: 0,…}
+20
+: 
+{tableName: "dbo.BookingGuarantors", totalFields: 2, mappedFields: 0, unmappedFields: 2,…}
+21
+: 
+{tableName: "dbo.BookingInvoiceItem", totalFields: 2, mappedFields: 0, unmappedFields: 2,…}
+22
+: 
+{tableName: "dbo.BookingOrigin", totalFields: 9, mappedFields: 0, unmappedFields: 9, doNotMigrate: 0,…}
+23
+: 
+{tableName: "dbo.BookingPayments", totalFields: 2, mappedFields: 0, unmappedFields: 2, doNotMigrate: 0,…}
+24
+: 
+{tableName: "dbo.BookingPriceItemSegments", totalFields: 7, mappedFields: 0, unmappedFields: 7,…}
+25
+: 
+{tableName: "dbo.BookingPriceSegments", totalFields: 5, mappedFields: 0, unmappedFields: 5,…}
+26
+: 
+{tableName: "dbo.BookingStatus", totalFields: 7, mappedFields: 0, unmappedFields: 7, doNotMigrate: 0,…}
+27
+: 
+{tableName: "dbo.BookingTariffBranchOffices", totalFields: 2, mappedFields: 0, unmappedFields: 2,…}
+28
+: 
+{tableName: "dbo.BookingTariffModels", totalFields: 2, mappedFields: 0, unmappedFields: 2,…}
+29
+: 
+{tableName: "dbo.BookingTariffs", totalFields: 20, mappedFields: 0, unmappedFields: 20,…}
+30
+: 
+{tableName: "dbo.BranchOfficeAccounts", totalFields: 2, mappedFields: 0, unmappedFields: 2,…}
+31
+: 
+{tableName: "dbo.BranchOfficeHolidays", totalFields: 2, mappedFields: 0, unmappedFields: 2,…}
+32
+: 
+{tableName: "dbo.BranchOffices", totalFields: 27, mappedFields: 0, unmappedFields: 27, doNotMigrate: 0,…}
+33
+: 
+{tableName: "dbo.Brand", totalFields: 2, mappedFields: 2, unmappedFields: 0, doNotMigrate: 0,…}
+34
+: 
+{tableName: "dbo.Car", totalFields: 70, mappedFields: 0, unmappedFields: 70, doNotMigrate: 0,…}
+35
+: 
+{tableName: "dbo.CarAttributes", totalFields: 3, mappedFields: 0, unmappedFields: 3, doNotMigrate: 0,…}
+36
+: 
+{tableName: "dbo.CarChanges", totalFields: 4, mappedFields: 0, unmappedFields: 4, doNotMigrate: 0,…}
+37
+: 
+{tableName: "dbo.CarCheck", totalFields: 14, mappedFields: 0, unmappedFields: 14, doNotMigrate: 0,…}
+38
+: 
+{tableName: "dbo.CarFiles", totalFields: 2, mappedFields: 0, unmappedFields: 2, doNotMigrate: 0,…}
+39
+: 
+{tableName: "dbo.CarPlates", totalFields: 7, mappedFields: 0, unmappedFields: 7, doNotMigrate: 0,…}
+40
+: 
+{tableName: "dbo.CarServiceAlerts", totalFields: 9, mappedFields: 0, unmappedFields: 9,…}
+41
+: 
+{tableName: "dbo.CarServiceSchedule", totalFields: 18, mappedFields: 0, unmappedFields: 18,…}
+42
+: 
+{tableName: "dbo.CashBox", totalFields: 8, mappedFields: 0, unmappedFields: 8, doNotMigrate: 0,…}
+43
+: 
+{tableName: "dbo.CashBoxAccountBalanceItem", totalFields: 7, mappedFields: 0, unmappedFields: 7,…}
+44
+: 
+{tableName: "dbo.Category", totalFields: 23, mappedFields: 5, unmappedFields: 5, doNotMigrate: 13,…}
+45
+: 
+{tableName: "dbo.CategoryAdditionals", totalFields: 2, mappedFields: 0, unmappedFields: 2,…}
+46
+: 
+{tableName: "dbo.CategoryBookingTariffs", totalFields: 2, mappedFields: 0, unmappedFields: 2,…}
+47
+: 
+{tableName: "dbo.Comment", totalFields: 19, mappedFields: 0, unmappedFields: 19, doNotMigrate: 0,…}
+48
+: 
+{tableName: "dbo.CommercialAgreementAdditionals", totalFields: 10, mappedFields: 0, unmappedFields: 10,…}
+49
+: 
+{tableName: "dbo.CommercialAgreementBookingTariffs", totalFields: 2, mappedFields: 0,…}
+50
+: 
+{tableName: "dbo.CommercialAgreementBranchOffices", totalFields: 2, mappedFields: 0, unmappedFields: 2,…}
+51
+: 
+{tableName: "dbo.CommercialAgreementCommissionableTaxes", totalFields: 6, mappedFields: 0,…}
+52
+: 
+{tableName: "dbo.CommercialAgreementCustomers", totalFields: 2, mappedFields: 0, unmappedFields: 2,…}
+53
+: 
+{tableName: "dbo.CommercialAgreementPaymentTypes", totalFields: 2, mappedFields: 0, unmappedFields: 2,…}
+54
+: 
+{tableName: "dbo.CommercialAgreements", totalFields: 37, mappedFields: 0, unmappedFields: 37,…}
+55
+: 
+{tableName: "dbo.CommissionSettlement", totalFields: 14, mappedFields: 0, unmappedFields: 14,…}
+56
+: 
+{tableName: "dbo.CorporateContractAdditionals", totalFields: 5, mappedFields: 0, unmappedFields: 5,…}
+57
+: 
+{tableName: "dbo.CorporateContractFiles", totalFields: 2, mappedFields: 0, unmappedFields: 2,…}
+58
+: 
+{tableName: "dbo.CorporateContractItems", totalFields: 10, mappedFields: 0, unmappedFields: 10,…}
+59
+: 
+{tableName: "dbo.CorporateContracts", totalFields: 13, mappedFields: 0, unmappedFields: 13,…}
+60
+: 
+{tableName: "dbo.CorporateQuotePayments", totalFields: 2, mappedFields: 0, unmappedFields: 2,…}
+61
+: 
+{tableName: "dbo.CorporateQuotePeriodInvoiceItems", totalFields: 5, mappedFields: 0, unmappedFields: 5,…}
+62
+: 
+{tableName: "dbo.CorporateQuotes", totalFields: 32, mappedFields: 0, unmappedFields: 32,…}
+63
+: 
+{tableName: "dbo.CorporateQuoteSupplies", totalFields: 14, mappedFields: 0, unmappedFields: 14,…}
+64
+: 
+{tableName: "dbo.CorporateQuoteSupplyInvoiceItem", totalFields: 2, mappedFields: 0, unmappedFields: 2,…}
+65
+: 
+{tableName: "dbo.CorporateQuoteSupplyItems", totalFields: 9, mappedFields: 0, unmappedFields: 9,…}
+66
+: 
+{tableName: "dbo.CreditCard", totalFields: 19, mappedFields: 0, unmappedFields: 19, doNotMigrate: 0,…}
+67
+: 
+{tableName: "dbo.CreditNoteFiles", totalFields: 2, mappedFields: 0, unmappedFields: 2, doNotMigrate: 0,…}
+68
+: 
+{tableName: "dbo.CreditNoteItems", totalFields: 5, mappedFields: 0, unmappedFields: 5, doNotMigrate: 0,…}
+69
+: 
+{tableName: "dbo.CreditNotes", totalFields: 19, mappedFields: 0, unmappedFields: 19, doNotMigrate: 0,…}
+70
+: 
+{tableName: "dbo.Currency", totalFields: 9, mappedFields: 0, unmappedFields: 9, doNotMigrate: 0,…}
+71
+: 
+{tableName: "dbo.CurrencyExchangeRate", totalFields: 6, mappedFields: 0, unmappedFields: 6,…}
+72
+: 
+{tableName: "dbo.CurrentAccount", totalFields: 5, mappedFields: 0, unmappedFields: 5, doNotMigrate: 0,…}
+73
+: 
+{tableName: "dbo.Customer", totalFields: 115, mappedFields: 13, unmappedFields: 102, doNotMigrate: 0,…}
+74
+: 
+{tableName: "dbo.CustomerCompanyTypes", totalFields: 2, mappedFields: 0, unmappedFields: 2,…}
+75
+: 
+{tableName: "dbo.CustomerFeedbackQuestions", totalFields: 13, mappedFields: 0, unmappedFields: 13,…}
+76
+: 
+{tableName: "dbo.CustomerFeedbackResponses", totalFields: 5, mappedFields: 0, unmappedFields: 5,…}
+77
+: 
+{tableName: "dbo.CustomerFeedbackSurveys", totalFields: 8, mappedFields: 0, unmappedFields: 8,…}
+78
+: 
+{tableName: "dbo.CustomerFiles", totalFields: 2, mappedFields: 0, unmappedFields: 2, doNotMigrate: 0,…}
+79
+: 
+{tableName: "dbo.CustomerInsurancePolicies", totalFields: 10, mappedFields: 0, unmappedFields: 10,…}
+80
+: 
+{tableName: "dbo.CustomerInsurancePolicyCoverages", totalFields: 5, mappedFields: 0, unmappedFields: 5,…}
+81
+: 
+{tableName: "dbo.CustomerInsurancePolicyFiles", totalFields: 2, mappedFields: 0, unmappedFields: 2,…}
+82
+: 
+{tableName: "dbo.CustomerInsurancePolicyInsureds", totalFields: 3, mappedFields: 0, unmappedFields: 3,…}
+83
+: 
+{tableName: "dbo.CustomerInsurancePolicyProperties", totalFields: 7, mappedFields: 0,…}
+84
+: 
+{tableName: "dbo.CustomerMembership", totalFields: 10, mappedFields: 0, unmappedFields: 10,…}
+85
+: 
+{tableName: "dbo.CustomerSatisfactionStatus", totalFields: 6, mappedFields: 0, unmappedFields: 6,…}
+86
+: 
+{tableName: "dbo.CustomerTransactions", totalFields: 10, mappedFields: 0, unmappedFields: 10,…}
+87
+: 
+{tableName: "dbo.DeviceIpRanges", totalFields: 2, mappedFields: 0, unmappedFields: 2, doNotMigrate: 0,…}
+88
+: 
+{tableName: "dbo.Devices", totalFields: 11, mappedFields: 0, unmappedFields: 11, doNotMigrate: 0,…}
+89
+: 
+{tableName: "dbo.DocumentNumberSeries", totalFields: 2, mappedFields: 0, unmappedFields: 2,…}
+90
+: 
+{tableName: "dbo.DocumentTypes", totalFields: 3, mappedFields: 0, unmappedFields: 3, doNotMigrate: 0,…}
+91
+: 
+{tableName: "dbo.ExcludedAdditionals", totalFields: 2, mappedFields: 0, unmappedFields: 2,…}
+92
+: 
+{tableName: "dbo.Expense", totalFields: 25, mappedFields: 0, unmappedFields: 25, doNotMigrate: 0,…}
+93
+: 
+{tableName: "dbo.ExpenseCars", totalFields: 2, mappedFields: 0, unmappedFields: 2, doNotMigrate: 0,…}
+94
+: 
+{tableName: "dbo.ExpenseCategory", totalFields: 2, mappedFields: 0, unmappedFields: 2, doNotMigrate: 0,…}
+95
+: 
+{tableName: "dbo.ExpenseFiles", totalFields: 2, mappedFields: 0, unmappedFields: 2, doNotMigrate: 0,…}
+96
+: 
+{tableName: "dbo.ExpenseInfraction", totalFields: 2, mappedFields: 0, unmappedFields: 2,…}
+97
+: 
+{tableName: "dbo.ExpenseInsurancePolicies", totalFields: 2, mappedFields: 0, unmappedFields: 2,…}
+98
+: 
+{tableName: "dbo.ExpenseRecurringExpenseSchedules", totalFields: 2, mappedFields: 0, unmappedFields: 2,…}
+99
+: 
+{tableName: "dbo.ExpenseServices", totalFields: 2, mappedFields: 0, unmappedFields: 2, doNotMigrate: 0,…}
+[100 … 199]
+100
+: 
+{tableName: "dbo.ExpenseType", totalFields: 9, mappedFields: 0, unmappedFields: 9, doNotMigrate: 0,…}
+101
+: 
+{tableName: "dbo.ExternalSystems", totalFields: 5, mappedFields: 0, unmappedFields: 5, doNotMigrate: 0,…}
+102
+: 
+{tableName: "dbo.Files", totalFields: 8, mappedFields: 0, unmappedFields: 8, doNotMigrate: 0,…}
+103
+: 
+{tableName: "dbo.FuelTypes", totalFields: 2, mappedFields: 0, unmappedFields: 2, doNotMigrate: 0,…}
+104
+: 
+{tableName: "dbo.GPSGatewayConfigs", totalFields: 11, mappedFields: 0, unmappedFields: 11,…}
+105
+: 
+{tableName: "dbo.Holidays", totalFields: 2, mappedFields: 0, unmappedFields: 2, doNotMigrate: 0,…}
+106
+: 
+{tableName: "dbo.IncidentContact", totalFields: 2, mappedFields: 0, unmappedFields: 2, doNotMigrate: 0,…}
+107
+: 
+{tableName: "dbo.IncidentExpenses", totalFields: 2, mappedFields: 0, unmappedFields: 2,…}
+108
+: 
+{tableName: "dbo.IncidentFiles", totalFields: 2, mappedFields: 0, unmappedFields: 2, doNotMigrate: 0,…}
+109
+: 
+{tableName: "dbo.IncidentInvoiceItem", totalFields: 2, mappedFields: 0, unmappedFields: 2,…}
+110
+: 
+{tableName: "dbo.IncidentItemRepairInformations", totalFields: 4, mappedFields: 0, unmappedFields: 4,…}
+111
+: 
+{tableName: "dbo.IncidentItems", totalFields: 7, mappedFields: 0, unmappedFields: 7, doNotMigrate: 0,…}
+112
+: 
+{tableName: "dbo.IncidentItemTypes", totalFields: 11, mappedFields: 0, unmappedFields: 11,…}
+113
+: 
+{tableName: "dbo.Incidents", totalFields: 52, mappedFields: 0, unmappedFields: 52, doNotMigrate: 0,…}
+114
+: 
+{tableName: "dbo.IncidentTaxItems", totalFields: 5, mappedFields: 0, unmappedFields: 5,…}
+115
+: 
+{tableName: "dbo.IncidentTypes", totalFields: 3, mappedFields: 0, unmappedFields: 3, doNotMigrate: 0,…}
+116
+: 
+{tableName: "dbo.Infraction", totalFields: 20, mappedFields: 0, unmappedFields: 20, doNotMigrate: 0,…}
+117
+: 
+{tableName: "dbo.InfractionCollectionStatus", totalFields: 5, mappedFields: 0, unmappedFields: 5,…}
+118
+: 
+{tableName: "dbo.InfractionComments", totalFields: 2, mappedFields: 0, unmappedFields: 2,…}
+119
+: 
+{tableName: "dbo.InfractionFiles", totalFields: 2, mappedFields: 0, unmappedFields: 2, doNotMigrate: 0,…}
+120
+: 
+{tableName: "dbo.InfractionInvoiceItem", totalFields: 2, mappedFields: 0, unmappedFields: 2,…}
+121
+: 
+{tableName: "dbo.InfractionPayments", totalFields: 2, mappedFields: 0, unmappedFields: 2,…}
+122
+: 
+{tableName: "dbo.InfractionPaymentStatus", totalFields: 5, mappedFields: 0, unmappedFields: 5,…}
+123
+: 
+{tableName: "dbo.InfractionTypes", totalFields: 5, mappedFields: 0, unmappedFields: 5, doNotMigrate: 0,…}
+124
+: 
+{tableName: "dbo.InsurancePolicies", totalFields: 15, mappedFields: 0, unmappedFields: 15,…}
+125
+: 
+{tableName: "dbo.InsurancePolicyCars", totalFields: 5, mappedFields: 0, unmappedFields: 5,…}
+126
+: 
+{tableName: "dbo.InsurancePolicyFiles", totalFields: 2, mappedFields: 0, unmappedFields: 2,…}
+127
+: 
+{tableName: "dbo.Invoice", totalFields: 36, mappedFields: 0, unmappedFields: 36, doNotMigrate: 0,…}
+128
+: 
+{tableName: "dbo.InvoiceAttributes", totalFields: 3, mappedFields: 0, unmappedFields: 3,…}
+129
+: 
+{tableName: "dbo.InvoiceFiles", totalFields: 2, mappedFields: 0, unmappedFields: 2, doNotMigrate: 0,…}
+130
+: 
+{tableName: "dbo.InvoiceInfractions", totalFields: 2, mappedFields: 0, unmappedFields: 2,…}
+131
+: 
+{tableName: "dbo.InvoiceItems", totalFields: 13, mappedFields: 0, unmappedFields: 13, doNotMigrate: 0,…}
+132
+: 
+{tableName: "dbo.InvoiceWithholdings", totalFields: 4, mappedFields: 0, unmappedFields: 4,…}
+133
+: 
+{tableName: "dbo.IpRanges", totalFields: 11, mappedFields: 0, unmappedFields: 11, doNotMigrate: 0,…}
+134
+: 
+{tableName: "dbo.ItemPrice", totalFields: 20, mappedFields: 0, unmappedFields: 20, doNotMigrate: 0,…}
+135
+: 
+{tableName: "dbo.LastMinuteBookingSettingBranchOffices", totalFields: 2, mappedFields: 0,…}
+136
+: 
+{tableName: "dbo.LastMinuteBookingSettings", totalFields: 5, mappedFields: 0, unmappedFields: 5,…}
+137
+: 
+{tableName: "dbo.LegalBackupForBookings", totalFields: 2, mappedFields: 0, unmappedFields: 2,…}
+138
+: 
+{tableName: "dbo.MailNotificationInputs", totalFields: 4, mappedFields: 0, unmappedFields: 4,…}
+139
+: 
+{tableName: "dbo.MailNotifications", totalFields: 19, mappedFields: 0, unmappedFields: 19,…}
+140
+: 
+{tableName: "dbo.Mails", totalFields: 13, mappedFields: 0, unmappedFields: 13, doNotMigrate: 0,…}
+141
+: 
+{tableName: "dbo.Model", totalFields: 35, mappedFields: 0, unmappedFields: 35, doNotMigrate: 0,…}
+142
+: 
+{tableName: "dbo.ModelAdditionals", totalFields: 2, mappedFields: 0, unmappedFields: 2,…}
+143
+: 
+{tableName: "dbo.ModelAttributes", totalFields: 7, mappedFields: 0, unmappedFields: 7, doNotMigrate: 0,…}
+144
+: 
+{tableName: "dbo.OneWayDropOffCharges", totalFields: 10, mappedFields: 0, unmappedFields: 10,…}
+145
+: 
+{tableName: "dbo.OversoldSetting", totalFields: 10, mappedFields: 0, unmappedFields: 10,…}
+146
+: 
+{tableName: "dbo.OversoldSettingUsers", totalFields: 2, mappedFields: 0, unmappedFields: 2,…}
+147
+: 
+{tableName: "dbo.Payment", totalFields: 65, mappedFields: 0, unmappedFields: 65, doNotMigrate: 0,…}
+148
+: 
+{tableName: "dbo.PaymentAttributes", totalFields: 3, mappedFields: 0, unmappedFields: 3,…}
+149
+: 
+{tableName: "dbo.PaymentFiles", totalFields: 2, mappedFields: 0, unmappedFields: 2, doNotMigrate: 0,…}
+150
+: 
+{tableName: "dbo.PaymentGatewayConfigBranchOffices", totalFields: 2, mappedFields: 0,…}
+151
+: 
+{tableName: "dbo.PaymentGatewayConfigs", totalFields: 14, mappedFields: 0, unmappedFields: 14,…}
+152
+: 
+{tableName: "dbo.PaymentGatewayInformation", totalFields: 13, mappedFields: 0, unmappedFields: 13,…}
+153
+: 
+{tableName: "dbo.PaymentType", totalFields: 4, mappedFields: 0, unmappedFields: 4, doNotMigrate: 0,…}
+154
+: 
+{tableName: "dbo.PaymentTypeAccounts", totalFields: 2, mappedFields: 0, unmappedFields: 2,…}
+155
+: 
+{tableName: "dbo.Permissions", totalFields: 6, mappedFields: 0, unmappedFields: 6, doNotMigrate: 0,…}
+156
+: 
+{tableName: "dbo.Place", totalFields: 18, mappedFields: 0, unmappedFields: 18, doNotMigrate: 0,…}
+157
+: 
+{tableName: "dbo.PlaceAdditionals", totalFields: 2, mappedFields: 0, unmappedFields: 2,…}
+158
+: 
+{tableName: "dbo.PlaceBrands", totalFields: 13, mappedFields: 0, unmappedFields: 13, doNotMigrate: 0,…}
+159
+: 
+{tableName: "dbo.PlaceType", totalFields: 3, mappedFields: 0, unmappedFields: 3, doNotMigrate: 0,…}
+160
+: 
+{tableName: "dbo.Plates", totalFields: 10, mappedFields: 0, unmappedFields: 10, doNotMigrate: 0,…}
+161
+: 
+{tableName: "dbo.PriceAgreement", totalFields: 12, mappedFields: 0, unmappedFields: 12,…}
+162
+: 
+{tableName: "dbo.PriceAgreementBookingTariff", totalFields: 2, mappedFields: 0, unmappedFields: 2,…}
+163
+: 
+{tableName: "dbo.PricesByCurrency", totalFields: 11, mappedFields: 0, unmappedFields: 11,…}
+164
+: 
+{tableName: "dbo.Promotion", totalFields: 28, mappedFields: 0, unmappedFields: 28, doNotMigrate: 0,…}
+165
+: 
+{tableName: "dbo.PromotionAdditionals", totalFields: 2, mappedFields: 0, unmappedFields: 2,…}
+166
+: 
+{tableName: "dbo.PromotionBranchOffices", totalFields: 2, mappedFields: 0, unmappedFields: 2,…}
+167
+: 
+{tableName: "dbo.PromotionCategories", totalFields: 2, mappedFields: 0, unmappedFields: 2,…}
+168
+: 
+{tableName: "dbo.PromotionCodes", totalFields: 6, mappedFields: 0, unmappedFields: 6, doNotMigrate: 0,…}
+169
+: 
+{tableName: "dbo.PromotionModels", totalFields: 2, mappedFields: 0, unmappedFields: 2, doNotMigrate: 0,…}
+170
+: 
+{tableName: "dbo.PromotionPaymentTypes", totalFields: 2, mappedFields: 0, unmappedFields: 2,…}
+171
+: 
+{tableName: "dbo.PurchaseOrderFiles", totalFields: 2, mappedFields: 0, unmappedFields: 2,…}
+172
+: 
+{tableName: "dbo.PurchaseOrderItems", totalFields: 9, mappedFields: 0, unmappedFields: 9,…}
+173
+: 
+{tableName: "dbo.PurchaseOrders", totalFields: 16, mappedFields: 0, unmappedFields: 16,…}
+174
+: 
+{tableName: "dbo.Receipts", totalFields: 8, mappedFields: 0, unmappedFields: 8, doNotMigrate: 0,…}
+175
+: 
+{tableName: "dbo.RecurringExpenseScheduleCars", totalFields: 2, mappedFields: 0, unmappedFields: 2,…}
+176
+: 
+{tableName: "dbo.RecurringExpenseSchedules", totalFields: 26, mappedFields: 0, unmappedFields: 26,…}
+177
+: 
+{tableName: "dbo.RentalAgentCategories", totalFields: 9, mappedFields: 0, unmappedFields: 9,…}
+178
+: 
+{tableName: "dbo.RentalAgentCategoryCommissionSettings", totalFields: 7, mappedFields: 0,…}
+179
+: 
+{tableName: "dbo.RentalAgentCommissionSettingAdditionals", totalFields: 2, mappedFields: 0,…}
+180
+: 
+{tableName: "dbo.RentalAgentCommissionSettingCategories", totalFields: 2, mappedFields: 0,…}
+181
+: 
+{tableName: "dbo.RentalAgentCommissionSettingExcludedAdditionalsFromRevenues", totalFields: 2,…}
+182
+: 
+{tableName: "dbo.RentalAgentCommissionSettingExcludedTaxesFromRevenues", totalFields: 2,…}
+183
+: 
+{tableName: "dbo.RentalAgentCommissionSettings", totalFields: 13, mappedFields: 0, unmappedFields: 13,…}
+184
+: 
+{tableName: "dbo.ScheduledTasks", totalFields: 18, mappedFields: 0, unmappedFields: 18,…}
+185
+: 
+{tableName: "dbo.SecurityAccessRequests", totalFields: 18, mappedFields: 0, unmappedFields: 18,…}
+186
+: 
+{tableName: "dbo.SecurityEvents", totalFields: 17, mappedFields: 0, unmappedFields: 17,…}
+187
+: 
+{tableName: "dbo.ServiceFiles", totalFields: 2, mappedFields: 0, unmappedFields: 2, doNotMigrate: 0,…}
+188
+: 
+{tableName: "dbo.ServicePriceItems", totalFields: 4, mappedFields: 0, unmappedFields: 4,…}
+189
+: 
+{tableName: "dbo.ServiceSchedule", totalFields: 10, mappedFields: 0, unmappedFields: 10,…}
+190
+: 
+{tableName: "dbo.ServiceStatus", totalFields: 6, mappedFields: 0, unmappedFields: 6, doNotMigrate: 0,…}
+191
+: 
+{tableName: "dbo.ServiceTypes", totalFields: 9, mappedFields: 0, unmappedFields: 9, doNotMigrate: 0,…}
+192
+: 
+{tableName: "dbo.Settings", totalFields: 5, mappedFields: 0, unmappedFields: 5, doNotMigrate: 0,…}
+193
+: 
+{tableName: "dbo.StockMovements", totalFields: 15, mappedFields: 0, unmappedFields: 15,…}
+194
+: 
+{tableName: "dbo.Stocks", totalFields: 12, mappedFields: 0, unmappedFields: 12, doNotMigrate: 0,…}
+195
+: 
+{tableName: "dbo.SubServiceScheduleByModels", totalFields: 7, mappedFields: 0, unmappedFields: 7,…}
+196
+: 
+{tableName: "dbo.SupplierRendition", totalFields: 9, mappedFields: 0, unmappedFields: 9,…}
+197
+: 
+{tableName: "dbo.SupplierRenditionItem", totalFields: 8, mappedFields: 0, unmappedFields: 8,…}
+198
+: 
+{tableName: "dbo.TariffCategoryPrices", totalFields: 10, mappedFields: 0, unmappedFields: 10,…}
+199
+: 
+{tableName: "dbo.TariffModelPrices", totalFields: 10, mappedFields: 0, unmappedFields: 10,…}
+[200 … 229]
+200
+: 
+{tableName: "dbo.TaxBranchOffices", totalFields: 2, mappedFields: 0, unmappedFields: 2,…}
+201
+: 
+{tableName: "dbo.Taxes", totalFields: 23, mappedFields: 0, unmappedFields: 23, doNotMigrate: 0,…}
+202
+: 
+{tableName: "dbo.TaxExcludedAdditionals", totalFields: 2, mappedFields: 0, unmappedFields: 2,…}
+203
+: 
+{tableName: "dbo.TaxIncludedTaxes", totalFields: 2, mappedFields: 0, unmappedFields: 2,…}
+204
+: 
+{tableName: "dbo.TaxPayerTypes", totalFields: 13, mappedFields: 0, unmappedFields: 13, doNotMigrate: 0,…}
+205
+: 
+{tableName: "dbo.TaxPlaces", totalFields: 2, mappedFields: 0, unmappedFields: 2, doNotMigrate: 0,…}
+206
+: 
+{tableName: "dbo.TollIntegrationConfigurations", totalFields: 9, mappedFields: 0, unmappedFields: 9,…}
+207
+: 
+{tableName: "dbo.UserClaims", totalFields: 4, mappedFields: 0, unmappedFields: 4, doNotMigrate: 0,…}
+208
+: 
+{tableName: "dbo.UserLogins", totalFields: 4, mappedFields: 0, unmappedFields: 4, doNotMigrate: 0,…}
+209
+: 
+{tableName: "dbo.UserPermission", totalFields: 3, mappedFields: 0, unmappedFields: 3, doNotMigrate: 0,…}
+210
+: 
+{tableName: "dbo.UserRoleBranchOffices", totalFields: 3, mappedFields: 0, unmappedFields: 3,…}
+211
+: 
+{tableName: "dbo.UserRoles", totalFields: 3, mappedFields: 0, unmappedFields: 3, doNotMigrate: 0,…}
+212
+: 
+{tableName: "dbo.UserRolesPermissionReadAccounts", totalFields: 2, mappedFields: 0, unmappedFields: 2,…}
+213
+: 
+{tableName: "dbo.UserRolesPermissionWriteAccounts", totalFields: 2, mappedFields: 0, unmappedFields: 2,…}
+214
+: 
+{tableName: "dbo.Users", totalFields: 44, mappedFields: 8, unmappedFields: 27, doNotMigrate: 9,…}
+215
+: 
+{tableName: "dbo.UsersCars", totalFields: 2, mappedFields: 0, unmappedFields: 2, doNotMigrate: 0,…}
+216
+: 
+{tableName: "dbo.UsersDevices", totalFields: 2, mappedFields: 0, unmappedFields: 2, doNotMigrate: 0,…}
+217
+: 
+{tableName: "dbo.UsersIpRanges", totalFields: 2, mappedFields: 0, unmappedFields: 2, doNotMigrate: 0,…}
+218
+: 
+{tableName: "dbo.Warehouses", totalFields: 10, mappedFields: 0, unmappedFields: 10, doNotMigrate: 0,…}
+219
+: 
+{tableName: "dbo.webpages_Roles", totalFields: 3, mappedFields: 0, unmappedFields: 3, doNotMigrate: 0,…}
+220
+: 
+{tableName: "dbo.WorkItemFiles", totalFields: 2, mappedFields: 0, unmappedFields: 2, doNotMigrate: 0,…}
+221
+: 
+{tableName: "dbo.WorkItemHistories", totalFields: 6, mappedFields: 0, unmappedFields: 6,…}
+222
+: 
+{tableName: "dbo.WorkItemLinks", totalFields: 6, mappedFields: 0, unmappedFields: 6, doNotMigrate: 0,…}
+223
+: 
+{tableName: "dbo.WorkItems", totalFields: 11, mappedFields: 0, unmappedFields: 11, doNotMigrate: 0,…}
+224
+: 
+{tableName: "dbo.WorkItemStates", totalFields: 5, mappedFields: 0, unmappedFields: 5, doNotMigrate: 0,…}
+225
+: 
+{tableName: "dbo.WorkItemStateTypes", totalFields: 6, mappedFields: 0, unmappedFields: 6,…}
+226
+: 
+{tableName: "dbo.WorkItemTemplates", totalFields: 4, mappedFields: 0, unmappedFields: 4,…}
+227
+: 
+{tableName: "dbo.WorkItemTransitions", totalFields: 4, mappedFields: 0, unmappedFields: 4,…}
+228
+: 
+{tableName: "dbo.WorkItemTypes", totalFields: 4, mappedFields: 0, unmappedFields: 4, doNotMigrate: 0,…}
+229
+: 
+{tableName: "dbo.WorkLogs", totalFields: 6, mappedFields: 0, unmappedFields: 6, doNotMigrate: 0,…}
