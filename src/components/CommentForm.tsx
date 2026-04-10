@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useTransition } from 'react'
+import { useState, useTransition, useRef } from 'react'
 import { useRouter } from 'next/navigation'
 import Button from './ui/Button'
 
@@ -25,6 +25,7 @@ export default function CommentForm({
   const [content, setContent] = useState('')
   const [error, setError] = useState<string | null>(null)
   const [isPending, startTransition] = useTransition()
+  const textareaRef = useRef<HTMLTextAreaElement>(null)
 
   if (!isAuthenticated) {
     return (
@@ -73,12 +74,17 @@ export default function CommentForm({
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-2">
       <textarea
+        ref={textareaRef}
         value={content}
-        onChange={(e) => setContent(e.target.value)}
+        onChange={(e) => {
+          setContent(e.target.value)
+          e.target.style.height = 'auto'
+          e.target.style.height = e.target.scrollHeight + 'px'
+        }}
         placeholder={placeholder}
         rows={3}
         maxLength={1000}
-        className="w-full bg-[var(--bg-primary)] border border-[var(--border)] rounded px-3 py-2 text-sm text-[var(--text-primary)] placeholder-[var(--text-secondary)] focus:outline-none focus:ring-2 focus:ring-[#818CF8] focus:border-transparent resize-none"
+        className="w-full bg-[var(--bg-primary)] border border-[var(--border)] rounded px-3 py-2 text-sm text-[var(--text-primary)] placeholder-[var(--text-secondary)] focus:outline-none focus:ring-2 focus:ring-[#818CF8] focus:border-transparent resize-none overflow-hidden"
       />
       {error && <p className="text-xs text-red-500">{error}</p>}
       <div className="flex items-center justify-between">

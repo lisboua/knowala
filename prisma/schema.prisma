@@ -69,13 +69,14 @@ enum QuestionStatus {
 }
 
 model Answer {
-  id           String   @id @default(cuid())
+  id           String    @id @default(cuid())
   content      String
   userId       String
   questionId   String
-  deletedByMod Boolean  @default(false)
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+  deletedByMod Boolean   @default(false)
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  editedAt     DateTime?
 
   user     User      @relation(fields: [userId], references: [id])
   question Question  @relation(fields: [questionId], references: [id])
@@ -87,14 +88,15 @@ model Answer {
 }
 
 model Comment {
-  id           String   @id @default(cuid())
+  id           String    @id @default(cuid())
   content      String
   userId       String
   answerId     String
   parentId     String? // for nested comments
-  deletedByMod Boolean  @default(false)
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+  deletedByMod Boolean   @default(false)
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  editedAt     DateTime?
 
   user    User      @relation(fields: [userId], references: [id])
   answer  Answer    @relation(fields: [answerId], references: [id])

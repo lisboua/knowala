@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import VoteButtons from './VoteButtons'
@@ -51,6 +51,13 @@ export default function Answer({ answer, currentUserId, isAuthenticated }: Answe
   const [reportError, setReportError] = useState('')
   const [reportSuccess, setReportSuccess] = useState(false)
   const [isReporting, setIsReporting] = useState(false)
+  const [isEditing, setIsEditing] = useState(false)
+  const [editContent, setEditContent] = useState(answer.content)
+  const [editError, setEditError] = useState<string | null>(null)
+  const [isSavingEdit, setIsSavingEdit] = useState(false)
+  const [currentContent, setCurrentContent] = useState(answer.content)
+  const [currentEditedAt, setCurrentEditedAt] = useState<Date | null>(answer.editedAt)
+  const editTextareaRef = useRef<HTMLTextAreaElement>(null)
 
   const upvotes = getVoteCount(answer.votes, 1)
   const downvotes = getVoteCount(answer.votes, -1)
@@ -94,6 +101,35 @@ export default function Answer({ answer, currentUserId, isAuthenticated }: Answe
       setReportError('Erro ao enviar denúncia.')
     } finally {
       setIsReporting(false)
+    }
+  }
+
+  async function handleSaveEdit() {
+    if (!editContent.trim() || editContent.trim() === currentContent) {
+      setIsEditing(false)
+      return
+    }
+    setIsSavingEdit(true)
+    setEditError(null)
+    try {
+      const res = await fetch(`/api/answers/${answer.id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ content: editContent.trim() }),
+      })
+      const data = await res.json()
+      if (!res.ok) {
+        setEditError(data.error || 'Erro ao salvar.')
+      } else {
+        setCurrentContent(data.data.content)
+        setEditContent(data.data.content)
+        setCurrentEditedAt(new Date(data.data.editedAt))
+        setIsEditing(false)
+      }
+    } catch {
+      setEditError('Erro ao salvar. Tente novamente.')
+    } finally {
+      setIsSavingEdit(false)
     }
   }
 
@@ -141,9 +177,49 @@ export default function Answer({ answer, currentUserId, isAuthenticated }: Answe
         </div>
 
         {/* Answer content */}
-        <p className="text-sm text-[var(--text-primary)] leading-relaxed mb-3 whitespace-pre-wrap break-words">
-          {answer.content}
-        </p>
+        {isEditing ? (
+          <div className="mb-3">
+            <textarea
+              ref={editTextareaRef}
+              value={editContent}
+              onChange={(e) => {
+                setEditContent(e.target.value)
+                e.target.style.height = 'auto'
+                e.target.style.height = e.target.scrollHeight + 'px'
+              }}
+              maxLength={5000}
+              className="w-full bg-[var(--bg-primary)] border border-[#818CF8] rounded px-3 py-2 text-sm text-[var(--text-primary)] focus:outline-none resize-none overflow-hidden"
+              onFocus={(e) => {
+                e.target.style.height = 'auto'
+                e.target.style.height = e.target.scrollHeight + 'px'
+              }}
+            />
+            {editError && <p className="text-xs text-red-500 mt-1">{editError}</p>}
+            <div className="flex items-center justify-between mt-1">
+              <span className="text-xs text-[var(--text-secondary)]">{editContent.length}/5000</span>
+              <div className="flex gap-2">
+                <button
+                  onClick={() => { setIsEditing(false); setEditContent(currentContent); setEditError(null) }}
+                  className="text-xs text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors px-2 py-1"
+                >
+                  Cancelar
+                </button>
+                <Button size="sm" onClick={handleSaveEdit} loading={isSavingEdit} disabled={editContent.length < 10}>
+                  Salvar
+                </Button>
+              </div>
+            </div>
+          </div>
+        ) : (
+          <p className="text-sm text-[var(--text-primary)] leading-relaxed mb-3 whitespace-pre-wrap break-words">
+            {currentContent}
+          </p>
+        )}
+        {currentEditedAt && !isEditing && (
+          <p className="text-xs text-[var(--text-secondary)] mb-2 italic">
+            editado {formatRelativeTime(currentEditedAt)}
+          </p>
+        )}
 
         {/* Action bar */}
         <div className="flex items-center gap-3 text-xs">
@@ -172,6 +248,23 @@ export default function Answer({ answer, currentUserId, isAuthenticated }: Answe
             </button>
           )}
 
+          {isAuthenticated && answer.userId === currentUserId && (
+            <button
+              onClick={() => {
+                setIsEditing(true)
+                setTimeout(() => {
+                  if (editTextareaRef.current) {
+                    editTextareaRef.current.focus()
+                    editTextareaRef.current.style.height = 'auto'
+                    editTextareaRef.current.style.height = editTextareaRef.current.scrollHeight + 'px'
+                  }
+                }, 0)
+              }}
+              className="text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors font-medium"
+            >
+              Editar
+            </button>
+          )}
           {isAuthenticated && answer.userId !== currentUserId && (
             <button
               onClick={() => setShowReportModal(true)}

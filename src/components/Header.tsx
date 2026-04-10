@@ -113,7 +113,12 @@ export default function Header() {
                     <div className="px-3 py-2 border-b border-[var(--border)]">
                       <p className="text-sm font-medium text-[var(--text-primary)]">{session.user.name}</p>
                       <p className="text-xs text-[var(--text-secondary)]">u/{session.user.username}</p>
-                      <p className="text-xs text-[#818CF8] font-semibold mt-0.5">⚡ {session.user.ecoScore} Eco</p>
+                      <p
+                        className="text-xs text-[#818CF8] font-semibold mt-0.5 cursor-help"
+                        title="O Eco é sua reputação no Knowala. Como é calculado: +2 por upvote em resposta · +1 por upvote em comentário · -1 por downvote"
+                      >
+                        ⚡ {session.user.ecoScore} Eco
+                      </p>
                     </div>
                     <Link
                       href={`/profile/${session.user.username}`}

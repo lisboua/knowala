@@ -58,8 +58,8 @@ ssh $SSH_OPTS "$SERVER_USER@$SERVER_IP" "
   # Gera o Prisma Client
   npx prisma generate
 
-  # Cria/atualiza tabelas no banco
-  npx prisma db push --accept-data-loss
+  # Aplica migrations pendentes
+  npx prisma migrate deploy
 
   # Build da aplicação
   npm run build

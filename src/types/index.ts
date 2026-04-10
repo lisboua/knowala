@@ -44,6 +44,7 @@ export interface CommentWithRelations {
   deletedByMod: boolean
   createdAt: Date
   updatedAt: Date
+  editedAt: Date | null
   user: {
     id: string
     name: string
@@ -66,6 +67,7 @@ export interface AnswerWithRelations {
   deletedByMod: boolean
   createdAt: Date
   updatedAt: Date
+  editedAt: Date | null
   user: {
     id: string
     name: string

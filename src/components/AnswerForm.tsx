@@ -142,11 +142,15 @@ export default function AnswerForm({ questionId, isAuthenticated, hasAlreadyAnsw
           <textarea
             ref={textareaRef}
             value={content}
-            onChange={(e) => setContent(e.target.value)}
+            onChange={(e) => {
+              setContent(e.target.value)
+              e.target.style.height = 'auto'
+              e.target.style.height = e.target.scrollHeight + 'px'
+            }}
             placeholder="Compartilhe sua perspectiva sobre a pergunta de hoje..."
             rows={5}
             maxLength={5000}
-            className="w-full bg-[var(--bg-primary)] px-4 py-3 text-sm text-[var(--text-primary)] placeholder-[var(--text-secondary)] focus:outline-none resize-none border-b border-[var(--border)]"
+            className="w-full bg-[var(--bg-primary)] px-4 py-3 text-sm text-[var(--text-primary)] placeholder-[var(--text-secondary)] focus:outline-none resize-none border-b border-[var(--border)] overflow-hidden"
           />
           {error && (
             <p className="text-xs text-red-500 px-4 pt-2">{error}</p>

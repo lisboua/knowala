@@ -13,37 +13,6 @@ const URL_PATTERNS = [
   /\b\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\b/g,
 ]
 
-// Obfuscated URL patterns (in Portuguese and common substitutions)
-const OBFUSCATED_URL_PATTERNS = [
-  // "ponto" = "dot" in Portuguese
-  /\bponto\s+com\b/gi,
-  /\bponto\s+net\b/gi,
-  /\bponto\s+org\b/gi,
-  /\bponto\s+br\b/gi,
-  /\bponto\s+io\b/gi,
-  /\bponto\s+com\s+ponto\s+br\b/gi,
-  /\bponto\s+[a-zA-Z]{2,4}\b/gi,
-
-  // "dot" in English
-  /\bdot\s+com\b/gi,
-  /\bdot\s+net\b/gi,
-  /\bdot\s+org\b/gi,
-  /\bdot\s+[a-zA-Z]{2,4}\b/gi,
-
-  // Number substitutions for dots
-  /[a-zA-Z0-9-]+\s*[\[\(]\s*\.\s*[\]\)]\s*com/gi,
-  /[a-zA-Z0-9-]+\s*[\[\(]\s*\.\s*[\]\)]\s*net/gi,
-  /[a-zA-Z0-9-]+\s*[\[\(]\s*\.\s*[\]\)]\s*org/gi,
-
-  // Slash substitutions
-  /https?\s*:\/\//gi,
-  /h\s*t\s*t\s*p\s*s?\s*:/gi,
-
-  // Common obfuscations
-  /\bwww\b.*\bcom\b/gi,
-  /\bwww\b.*\bnet\b/gi,
-  /\bwww\b.*\borg\b/gi,
-]
 
 // Hate speech patterns in Portuguese (basic wordlist)
 const HATE_SPEECH_PATTERNS = [
@@ -84,14 +53,6 @@ export function filterContent(content: string): ContentFilterResult {
     pattern.lastIndex = 0 // Reset regex state
     if (pattern.test(content)) {
       return { valid: false, reason: 'Links e URLs não são permitidos no conteúdo.' }
-    }
-  }
-
-  // Check for obfuscated URLs
-  for (const pattern of OBFUSCATED_URL_PATTERNS) {
-    pattern.lastIndex = 0
-    if (pattern.test(content)) {
-      return { valid: false, reason: 'Links e URLs disfarçados não são permitidos.' }
     }
   }
 

@@ -117,7 +117,10 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
 
         {/* Stats */}
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-5">
-          <div className="bg-[var(--bg-primary)] rounded p-3 text-center">
+          <div
+            className="bg-[var(--bg-primary)] rounded p-3 text-center cursor-help"
+            title="O Eco é sua reputação no Knowala. Como é calculado: +2 por upvote em resposta · +1 por upvote em comentário · -1 por downvote"
+          >
             <p className="text-lg font-bold text-[#818CF8]">⚡ {user.ecoScore}</p>
             <p className="text-xs text-[var(--text-secondary)] mt-0.5">Eco Score</p>
           </div>

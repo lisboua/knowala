@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import VoteButtons from './VoteButtons'
@@ -55,6 +55,13 @@ export default function Comment({
   const [reportError, setReportError] = useState('')
   const [reportSuccess, setReportSuccess] = useState(false)
   const [isReporting, setIsReporting] = useState(false)
+  const [isEditing, setIsEditing] = useState(false)
+  const [editContent, setEditContent] = useState(comment.content)
+  const [editError, setEditError] = useState<string | null>(null)
+  const [isSavingEdit, setIsSavingEdit] = useState(false)
+  const [currentContent, setCurrentContent] = useState(comment.content)
+  const [currentEditedAt, setCurrentEditedAt] = useState<Date | null>(comment.editedAt)
+  const editTextareaRef = useRef<HTMLTextAreaElement>(null)
 
   const upvotes = getVoteCount(comment.votes, 1)
   const downvotes = getVoteCount(comment.votes, -1)
@@ -112,6 +119,35 @@ export default function Comment({
     }
   }
 
+  async function handleSaveEdit() {
+    if (!editContent.trim() || editContent.trim() === currentContent) {
+      setIsEditing(false)
+      return
+    }
+    setIsSavingEdit(true)
+    setEditError(null)
+    try {
+      const res = await fetch(`/api/comments/${comment.id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ content: editContent.trim() }),
+      })
+      const data = await res.json()
+      if (!res.ok) {
+        setEditError(data.error || 'Erro ao salvar.')
+      } else {
+        setCurrentContent(data.data.content)
+        setEditContent(data.data.content)
+        setCurrentEditedAt(new Date(data.data.editedAt))
+        setIsEditing(false)
+      }
+    } catch {
+      setEditError('Erro ao salvar. Tente novamente.')
+    } finally {
+      setIsSavingEdit(false)
+    }
+  }
+
   return (
     <div className={`${depth > 0 ? 'ml-6 pl-3 border-l border-[var(--border)]' : ''}`}>
       <div className="py-2">
@@ -143,9 +179,49 @@ export default function Comment({
         </div>
 
         {/* Content */}
-        <p className="text-sm text-[var(--text-primary)] leading-relaxed mb-2 whitespace-pre-wrap break-words">
-          {comment.content}
-        </p>
+        {isEditing ? (
+          <div className="mb-2">
+            <textarea
+              ref={editTextareaRef}
+              value={editContent}
+              onChange={(e) => {
+                setEditContent(e.target.value)
+                e.target.style.height = 'auto'
+                e.target.style.height = e.target.scrollHeight + 'px'
+              }}
+              maxLength={1000}
+              className="w-full bg-[var(--bg-primary)] border border-[#818CF8] rounded px-3 py-2 text-sm text-[var(--text-primary)] focus:outline-none resize-none overflow-hidden"
+              onFocus={(e) => {
+                e.target.style.height = 'auto'
+                e.target.style.height = e.target.scrollHeight + 'px'
+              }}
+            />
+            {editError && <p className="text-xs text-red-500 mt-1">{editError}</p>}
+            <div className="flex items-center justify-between mt-1">
+              <span className="text-xs text-[var(--text-secondary)]">{editContent.length}/1000</span>
+              <div className="flex gap-2">
+                <button
+                  onClick={() => { setIsEditing(false); setEditContent(currentContent); setEditError(null) }}
+                  className="text-xs text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors px-2 py-1"
+                >
+                  Cancelar
+                </button>
+                <Button size="sm" onClick={handleSaveEdit} loading={isSavingEdit} disabled={editContent.length < 2}>
+                  Salvar
+                </Button>
+              </div>
+            </div>
+          </div>
+        ) : (
+          <p className="text-sm text-[var(--text-primary)] leading-relaxed mb-2 whitespace-pre-wrap break-words">
+            {currentContent}
+          </p>
+        )}
+        {currentEditedAt && !isEditing && (
+          <p className="text-xs text-[var(--text-secondary)] mb-1 italic">
+            editado {formatRelativeTime(currentEditedAt)}
+          </p>
+        )}
 
         {/* Actions */}
         <div className="flex items-center gap-3">
@@ -163,6 +239,23 @@ export default function Comment({
               className="text-xs text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors font-medium"
             >
               Responder
+            </button>
+          )}
+          {isAuthenticated && comment.userId === currentUserId && (
+            <button
+              onClick={() => {
+                setIsEditing(true)
+                setTimeout(() => {
+                  if (editTextareaRef.current) {
+                    editTextareaRef.current.focus()
+                    editTextareaRef.current.style.height = 'auto'
+                    editTextareaRef.current.style.height = editTextareaRef.current.scrollHeight + 'px'
+                  }
+                }, 0)
+              }}
+              className="text-xs text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors font-medium"
+            >
+              Editar
             </button>
           )}
           {isAuthenticated && comment.userId !== currentUserId && (
