@@ -57,21 +57,6 @@ export default function Header() {
           Knowala
         </Link>
 
-        {/* Nav links */}
-        <div className="hidden sm:flex items-center gap-6">
-          <Link
-            href="/arquivo"
-            className="text-sm font-medium text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors"
-          >
-            Arquivo
-          </Link>
-          <Link
-            href="/sugestoes"
-            className="text-sm font-medium text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors"
-          >
-            Sugestões
-          </Link>
-        </div>
 
         {/* Nav */}
         <nav className="flex items-center gap-2">
@@ -130,6 +115,28 @@ export default function Header() {
                       </svg>
                       Meu Perfil
                     </Link>
+                    <div className="border-t border-[var(--border)]">
+                      <Link
+                        href="/arquivo"
+                        className="flex items-center gap-2 px-3 py-2 text-sm text-[var(--text-primary)] hover:bg-[var(--bg-hover)] transition-colors"
+                        onClick={() => setMenuOpen(false)}
+                      >
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4" />
+                        </svg>
+                        Arquivo
+                      </Link>
+                      <Link
+                        href="/sugestoes"
+                        className="flex items-center gap-2 px-3 py-2 text-sm text-[var(--text-primary)] hover:bg-[var(--bg-hover)] transition-colors"
+                        onClick={() => setMenuOpen(false)}
+                      >
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+                        </svg>
+                        Sugestões
+                      </Link>
+                    </div>
                     <Link
                       href="/convites"
                       className="flex items-center gap-2 px-3 py-2 text-sm text-[var(--text-primary)] hover:bg-[var(--bg-hover)] transition-colors"
