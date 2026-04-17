@@ -181,9 +181,15 @@ export async function sendDailyDigest(): Promise<{ sent: number; skipped: number
       .slice(0, 3)
   }
 
-  // Fetch eligible users
+  // On Sundays, skip users who will receive the weekly digest instead
+  const isSunday = new Date().getDay() === 0
+
   const users = await db.user.findMany({
-    where: { emailVerified: true, emailDigest: true },
+    where: {
+      emailVerified: true,
+      emailDigest: true,
+      ...(isSunday ? { emailWeeklyDigest: false } : {}),
+    },
     select: { id: true, email: true, name: true, emailDigestToken: true },
   })
 
@@ -258,6 +264,378 @@ export function createTransporter() {
     socketTimeout: 15000,
     greetingTimeout: 10000,
   })
+}
+
+// ─── Weekly Digest ───────────────────────────────────────────────────────────
+
+interface WeeklyQuestion {
+  content: string
+  slug: string
+  answerCount: number
+}
+
+interface WeeklyTopAnswer {
+  content: string
+  username: string
+  upvotes: number
+  questionContent: string
+  questionSlug: string
+  isUserAnswer: boolean
+}
+
+interface WeeklyUserStats {
+  answersThisWeek: number
+  upvotesReceived: number
+  ecoScoreGain: number
+  badgesEarned: { name: string; icon: string }[]
+}
+
+interface WeeklyData {
+  topQuestions: WeeklyQuestion[]
+  topAnswer: WeeklyTopAnswer | null
+  userStats: WeeklyUserStats | null
+  openQuestion: { content: string; slug: string } | null
+  hasInvites: boolean
+  todayQuestion: { content: string; slug: string } | null
+  unsubscribeUrl: string
+  baseUrl: string
+}
+
+export type { WeeklyData }
+
+export function buildWeeklyHtmlPublic(data: WeeklyData): string {
+  const { topQuestions, topAnswer, userStats, openQuestion, hasInvites, todayQuestion, unsubscribeUrl, baseUrl } = data
+
+  // Section 1 — top questions
+  const questionsHtml = topQuestions.map((q) => `
+    <a href="${baseUrl}/pergunta/${q.slug}" style="display:block;text-decoration:none;border-radius:12px;border:1px solid #2d2d2f;background-color:#1e1e1f;padding:16px 18px;margin-bottom:10px;">
+      <p style="margin:0 0 6px;font-size:14px;color:#d7dadc;font-weight:500;line-height:1.5;">${q.content}</p>
+      <span style="font-size:12px;color:#6b7280;">${q.answerCount} ${q.answerCount === 1 ? 'resposta' : 'respostas'}</span>
+    </a>`).join('')
+
+  // Section 2 — top answer
+  const topAnswerHtml = topAnswer ? (() => {
+    const truncated = topAnswer.content.length > 280 ? topAnswer.content.slice(0, 280) + '…' : topAnswer.content
+    const userBadge = topAnswer.isUserAnswer
+      ? `<span style="display:inline-block;background-color:#818CF8;color:#fff;font-size:11px;font-weight:600;padding:2px 8px;border-radius:99px;margin-bottom:10px;">Sua resposta</span>`
+      : ''
+    return `
+    <div style="margin-bottom:40px;">
+      <p style="margin:0 0 6px;font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#6b7280;">Resposta em destaque</p>
+      <div style="border-radius:12px;border:1px solid ${topAnswer.isUserAnswer ? '#818CF8' : '#2d2d2f'};background-color:${topAnswer.isUserAnswer ? '#1e1e3a' : '#1e1e1f'};padding:18px 20px;">
+        ${userBadge}
+        <p style="margin:0 0 6px;font-size:12px;color:#6b7280;">Em: <em>${topAnswer.questionContent}</em></p>
+        <p style="margin:8px 0 12px;color:#d7dadc;font-size:14px;line-height:1.6;">${truncated}</p>
+        <div style="display:flex;align-items:center;gap:12px;">
+          <span style="color:#6b7280;font-size:12px;">u/${topAnswer.username}</span>
+          <span style="color:#818CF8;font-size:12px;font-weight:600;">▲ ${topAnswer.upvotes}</span>
+          <a href="${baseUrl}/pergunta/${topAnswer.questionSlug}" style="font-size:12px;color:#818CF8;text-decoration:none;font-weight:600;">Ver conversa →</a>
+        </div>
+      </div>
+    </div>`
+  })() : ''
+
+  // Section 3 — user stats (only if something positive happened)
+  const statsHtml = (() => {
+    if (!userStats) return ''
+    const parts: string[] = []
+    if (userStats.answersThisWeek > 0)
+      parts.push(`<span style="display:inline-block;background:#1e1e2e;border:1px solid #2d2d4a;border-radius:8px;padding:8px 14px;font-size:13px;color:#d7dadc;margin:4px;">💬 ${userStats.answersThisWeek} ${userStats.answersThisWeek === 1 ? 'resposta publicada' : 'respostas publicadas'}</span>`)
+    if (userStats.upvotesReceived > 0)
+      parts.push(`<span style="display:inline-block;background:#1e1e2e;border:1px solid #2d2d4a;border-radius:8px;padding:8px 14px;font-size:13px;color:#d7dadc;margin:4px;">▲ ${userStats.upvotesReceived} ${userStats.upvotesReceived === 1 ? 'upvote recebido' : 'upvotes recebidos'}</span>`)
+    if (userStats.ecoScoreGain > 0)
+      parts.push(`<span style="display:inline-block;background:#1e1e2e;border:1px solid #2d2d4a;border-radius:8px;padding:8px 14px;font-size:13px;color:#d7dadc;margin:4px;">⚡ +${userStats.ecoScoreGain} Eco Score</span>`)
+    for (const b of userStats.badgesEarned)
+      parts.push(`<span style="display:inline-block;background:#1e1e2e;border:1px solid #2d2d4a;border-radius:8px;padding:8px 14px;font-size:13px;color:#d7dadc;margin:4px;">${b.icon} ${b.name} conquistado</span>`)
+
+    if (parts.length === 0) return ''
+    return `
+    <div style="margin-bottom:40px;">
+      <p style="margin:0 0 6px;font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#6b7280;">Sua semana</p>
+      <div style="display:flex;flex-wrap:wrap;margin:-4px;">
+        ${parts.join('')}
+      </div>
+    </div>`
+  })()
+
+  // Section 4 — open question
+  const openQuestionHtml = openQuestion ? `
+    <div style="margin-bottom:40px;">
+      <p style="margin:0 0 6px;font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#6b7280;">Ainda dá tempo</p>
+      <div style="border-radius:12px;border:1px solid #2d2d2f;background-color:#1e1e1f;padding:18px 20px;">
+        <p style="margin:0 0 14px;font-size:15px;color:#d7dadc;font-weight:500;line-height:1.5;">${openQuestion.content}</p>
+        <a href="${baseUrl}/pergunta/${openQuestion.slug}" style="display:inline-block;background-color:#818CF8;color:#fff;font-size:13px;font-weight:600;padding:8px 18px;border-radius:8px;text-decoration:none;">Entrar na conversa →</a>
+      </div>
+    </div>` : ''
+
+  // Section 5 — invites CTA
+  const invitesHtml = hasInvites ? `
+    <div style="margin-bottom:40px;border-radius:12px;border:1px solid #2d2d2f;background-color:#1e1e1f;padding:18px 20px;">
+      <p style="margin:0 0 4px;font-size:14px;color:#d7dadc;font-weight:500;">Conhece alguém que cairia bem aqui?</p>
+      <p style="margin:0 0 14px;font-size:13px;color:#6b7280;line-height:1.5;">Você tem convites disponíveis. Compartilhe com quem você acha que tem algo a dizer.</p>
+      <a href="${baseUrl}/convites" style="display:inline-block;color:#818CF8;font-size:13px;font-weight:600;text-decoration:none;">Ver meus convites →</a>
+    </div>` : ''
+
+  // Section 6 — today's question
+  const todayHtml = todayQuestion ? `
+    <div style="background:linear-gradient(135deg,#1a1a2e 0%,#16162a 100%);border-radius:16px;border:1px solid #2a2a4a;padding:28px 28px 24px;margin-bottom:32px;">
+      <p style="margin:0 0 8px;font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#818CF8;">Pergunta de hoje</p>
+      <h2 style="margin:0 0 20px;font-size:20px;font-weight:700;color:#f0f0f2;line-height:1.35;">${todayQuestion.content}</h2>
+      <a href="${baseUrl}/pergunta/${todayQuestion.slug}" style="display:inline-block;background-color:#818CF8;color:#fff;font-size:14px;font-weight:600;padding:11px 22px;border-radius:8px;text-decoration:none;">Responder agora →</a>
+    </div>` : ''
+
+  return `<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+  <title>Knowala — Resumo da semana</title>
+</head>
+<body style="margin:0;padding:0;background-color:#111113;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;">
+  <table width="100%" cellpadding="0" cellspacing="0" style="background-color:#111113;padding:32px 16px;">
+    <tr>
+      <td align="center">
+        <table width="100%" cellpadding="0" cellspacing="0" style="max-width:560px;">
+
+          <!-- Logo -->
+          <tr>
+            <td style="padding-bottom:28px;">
+              <span style="font-size:22px;font-weight:800;color:#818CF8;letter-spacing:-0.5px;">Knowala</span>
+            </td>
+          </tr>
+
+          <!-- Hero -->
+          <tr>
+            <td style="padding-bottom:32px;">
+              <p style="margin:0 0 4px;font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#6b7280;">Resumo semanal</p>
+              <h1 style="margin:0;font-size:24px;font-weight:700;color:#f0f0f2;line-height:1.3;">O que a comunidade pensou essa semana</h1>
+            </td>
+          </tr>
+
+          <!-- Divider -->
+          <tr><td style="height:1px;background-color:#1e1e1f;"></td></tr>
+          <tr><td style="height:28px;"></td></tr>
+
+          <!-- Section 1: top questions -->
+          ${topQuestions.length > 0 ? `<tr>
+            <td style="padding-bottom:40px;">
+              <p style="margin:0 0 12px;font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#6b7280;">As perguntas que mais geraram conversa</p>
+              ${questionsHtml}
+            </td>
+          </tr>` : ''}
+
+          <!-- Section 2: top answer -->
+          <tr><td>${topAnswerHtml}</td></tr>
+
+          <!-- Section 3: user stats -->
+          <tr><td>${statsHtml}</td></tr>
+
+          <!-- Section 4: open question -->
+          <tr><td>${openQuestionHtml}</td></tr>
+
+          <!-- Section 5: invites -->
+          <tr><td>${invitesHtml}</td></tr>
+
+          <!-- Divider -->
+          <tr><td style="height:1px;background-color:#1e1e1f;"></td></tr>
+          <tr><td style="height:28px;"></td></tr>
+
+          <!-- Section 6: today's question -->
+          <tr><td>${todayHtml}</td></tr>
+
+          <!-- Footer -->
+          <tr>
+            <td>
+              <p style="margin:0;font-size:12px;color:#3d3d3f;line-height:1.6;">
+                Você está recebendo este e-mail porque se inscreveu no Knowala.<br />
+                <a href="${unsubscribeUrl}" style="color:#3d3d3f;text-decoration:underline;">Cancelar inscrição do resumo semanal</a>
+              </p>
+            </td>
+          </tr>
+
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>`
+}
+
+type RawAnswer = {
+  id: string; content: string; userId: string; createdAt: Date
+  user: { username: string }
+  votes: { value: number }[]
+  question: { content: string; slug: string | null }
+}
+
+interface WeeklySharedPayload {
+  topQuestions: WeeklyQuestion[]
+  topAnswer: RawAnswer | null
+  openQuestion: { content: string; slug: string } | null
+  todayQuestion: { content: string; slug: string } | null
+}
+
+export async function buildWeeklyDigestPayload(
+  _recipientEmail: string,
+  _baseUrl: string
+): Promise<WeeklySharedPayload> {
+  const now = new Date()
+  const weekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000)
+
+  const weekQuestions = await db.question.findMany({
+    where: { status: 'PUBLISHED', publishedAt: { gte: weekAgo } },
+    include: { answers: { where: { deletedByMod: false }, select: { id: true } } },
+    orderBy: { publishedAt: 'desc' },
+  })
+
+  const topQuestions = weekQuestions
+    .sort((a, b) => b.answers.length - a.answers.length)
+    .slice(0, 2)
+    .map((q) => ({ content: q.content, slug: q.slug!, answerCount: q.answers.length }))
+
+  const topQuestionIds = topQuestions.map((q) => weekQuestions.find((wq) => wq.slug === q.slug)!.id)
+
+  let topAnswer: RawAnswer | null = null
+  if (weekQuestions.length > 0) {
+    const weekAnswers = await db.answer.findMany({
+      where: { questionId: { in: weekQuestions.map((q) => q.id) }, deletedByMod: false },
+      include: {
+        user: { select: { username: true } },
+        votes: { where: { targetType: 'ANSWER', value: 1 }, select: { value: true } },
+        question: { select: { content: true, slug: true } },
+      },
+    })
+    topAnswer = weekAnswers.sort((a, b) => b.votes.length - a.votes.length)[0] ?? null
+  }
+
+  const threeDaysAgo = new Date(now.getTime() - 3 * 24 * 60 * 60 * 1000)
+  const openQuestionRaw = await db.question.findFirst({
+    where: {
+      status: 'PUBLISHED',
+      publishedAt: { gte: threeDaysAgo },
+      id: { notIn: topQuestionIds },
+      answers: { some: { deletedByMod: false } },
+    },
+    orderBy: { publishedAt: 'desc' },
+    select: { content: true, slug: true },
+  })
+  const openQuestion = openQuestionRaw?.slug
+    ? { content: openQuestionRaw.content, slug: openQuestionRaw.slug }
+    : null
+
+  const todayQuestionRaw = await db.question.findFirst({
+    where: { status: 'PUBLISHED' },
+    orderBy: { publishedAt: 'desc' },
+    select: { content: true, slug: true },
+  })
+  const todayQuestion = todayQuestionRaw?.slug
+    ? { content: todayQuestionRaw.content, slug: todayQuestionRaw.slug }
+    : null
+
+  return { topQuestions, topAnswer, openQuestion, todayQuestion }
+}
+
+export async function sendWeeklyDigest(): Promise<{ sent: number; skipped: number }> {
+  const baseUrl = process.env.NEXTAUTH_URL || 'https://knowala.com.br'
+  const now = new Date()
+  const weekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000)
+
+  const { topQuestions, topAnswer, openQuestion, todayQuestion } = await buildWeeklyDigestPayload('', baseUrl)
+
+  // Fetch eligible users
+  const users = await db.user.findMany({
+    where: { emailVerified: true, emailWeeklyDigest: true },
+    select: {
+      id: true, email: true, name: true,
+      emailWeeklyDigestToken: true,
+      invitesRemaining: true,
+      badges: { include: { badge: true } },
+    },
+  })
+
+  const transporter = createTransporter()
+  let sent = 0
+  let skipped = 0
+
+  for (const user of users) {
+    let token = user.emailWeeklyDigestToken
+    if (!token) {
+      token = randomBytes(32).toString('hex')
+      await db.user.update({ where: { id: user.id }, data: { emailWeeklyDigestToken: token } })
+    }
+
+    // User stats this week
+    const [userAnswers, userUpvotes, userBadgesThisWeek] = await Promise.all([
+      db.answer.findMany({
+        where: { userId: user.id, createdAt: { gte: weekAgo }, deletedByMod: false },
+        select: { id: true },
+      }),
+      db.vote.count({
+        where: {
+          value: 1,
+          targetType: 'ANSWER',
+          createdAt: { gte: weekAgo },
+          answer: { userId: user.id },
+        },
+      }),
+      db.userBadge.findMany({
+        where: { userId: user.id, awardedAt: { gte: weekAgo } },
+        include: { badge: { select: { name: true, icon: true } } },
+      }),
+    ])
+
+    const hasPositiveStats =
+      userAnswers.length > 0 || userUpvotes > 0 || userBadgesThisWeek.length > 0
+
+    const userStats: WeeklyUserStats | null = hasPositiveStats
+      ? {
+          answersThisWeek: userAnswers.length,
+          upvotesReceived: userUpvotes,
+          ecoScoreGain: userAnswers.length * 2 + userUpvotes,
+          badgesEarned: userBadgesThisWeek.map((ub) => ({ name: ub.badge.name, icon: ub.badge.icon })),
+        }
+      : null
+
+    const weeklyTopAnswer: WeeklyTopAnswer | null = topAnswer
+      ? {
+          content: topAnswer.content,
+          username: topAnswer.user.username,
+          upvotes: topAnswer.votes.length,
+          questionContent: topAnswer.question.content,
+          questionSlug: topAnswer.question.slug!,
+          isUserAnswer: topAnswer.userId === user.id,
+        }
+      : null
+
+    const unsubscribeUrl = `${baseUrl}/api/unsubscribe?token=${token}&type=weekly`
+
+    const html = buildWeeklyHtmlPublic({
+      topQuestions,
+      topAnswer: weeklyTopAnswer,
+      userStats,
+      openQuestion,
+      hasInvites: user.invitesRemaining > 0,
+      todayQuestion,
+      unsubscribeUrl,
+      baseUrl,
+    })
+
+    try {
+      await transporter.sendMail({
+        from: `"Knowala" <${process.env.SMTP_FROM || process.env.SMTP_USER}>`,
+        to: user.email,
+        subject: `Knowala — O que a comunidade pensou essa semana`,
+        html,
+        text: `Knowala — Resumo semanal\n\nAcesse: ${baseUrl}\n\nCancelar inscrição: ${unsubscribeUrl}`,
+      })
+      sent++
+    } catch (err) {
+      console.error(`[sendWeeklyDigest] failed for ${user.email}:`, err)
+      skipped++
+    }
+  }
+
+  return { sent, skipped }
 }
 
 // ─── Welcome / Onboarding ────────────────────────────────────────────────────

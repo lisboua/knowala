@@ -26,9 +26,11 @@ model User {
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
 
-  invitesRemaining   Int       @default(0)
-  emailDigest        Boolean   @default(true)
-  emailDigestToken   String?   @unique
+  invitesRemaining        Int       @default(0)
+  emailDigest             Boolean   @default(true)
+  emailDigestToken        String?   @unique
+  emailWeeklyDigest       Boolean   @default(true)
+  emailWeeklyDigestToken  String?   @unique
 
   answers            Answer[]
   comments           Comment[]

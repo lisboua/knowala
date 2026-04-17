@@ -9,8 +9,11 @@ function UnsubscribeContent() {
   const status = params.get('status')
   const error = params.get('error')
   const token = params.get('token')
+  const type = params.get('type') === 'weekly' ? 'weekly' : 'daily'
   const [resubscribed, setResubscribed] = useState(false)
   const [loading, setLoading] = useState(false)
+
+  const emailLabel = type === 'weekly' ? 'resumo semanal' : 'digest diário'
 
   async function handleResubscribe() {
     if (!token) return
@@ -19,7 +22,7 @@ function UnsubscribeContent() {
       const res = await fetch('/api/unsubscribe', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ token }),
+        body: JSON.stringify({ token, type }),
       })
       if (res.ok) setResubscribed(true)
     } finally {
@@ -54,7 +57,7 @@ function UnsubscribeContent() {
         </div>
         <h1 className="text-xl font-semibold text-[var(--text-primary)] mb-2">Você está de volta!</h1>
         <p className="text-sm text-[var(--text-secondary)]">
-          Você voltará a receber o digest diário do Knowala.
+          Você voltará a receber o {emailLabel} do Knowala.
         </p>
         <Link href="/" className="inline-block mt-6 text-sm text-[#818CF8] hover:underline">
           Ir para o Knowala
@@ -77,8 +80,8 @@ function UnsubscribeContent() {
         </h1>
         <p className="text-sm text-[var(--text-secondary)] mb-6">
           {already
-            ? 'Você não recebia e-mails do Knowala.'
-            : 'Você não receberá mais o digest diário. Suas configurações na plataforma continuam as mesmas.'}
+            ? `Você não recebia o ${emailLabel} do Knowala.`
+            : `Você não receberá mais o ${emailLabel}. Você pode reativar quando quiser nas suas configurações de notificações.`}
         </p>
         {token && (
           <button
@@ -89,8 +92,11 @@ function UnsubscribeContent() {
             {loading ? 'Aguarde…' : 'Mudou de ideia? Clique para se re-inscrever'}
           </button>
         )}
-        <div className="mt-6">
-          <Link href="/" className="text-sm text-[#818CF8] hover:underline">
+        <div className="mt-6 flex flex-col gap-2 items-center">
+          <Link href="/notificacoes" className="text-sm text-[#818CF8] hover:underline">
+            Gerenciar notificações
+          </Link>
+          <Link href="/" className="text-sm text-[var(--text-secondary)] hover:underline">
             Voltar para o Knowala
           </Link>
         </div>
