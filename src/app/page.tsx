@@ -2,6 +2,7 @@ import Link from 'next/link'
 import { auth } from '@/lib/auth'
 import { getCurrentQuestion } from '@/lib/questions'
 import { db } from '@/lib/db'
+import { getUserBookmarkSet } from '@/lib/bookmarks'
 import QuestionView from '@/components/QuestionView'
 import HomeHero from '@/components/HomeHero'
 import WelcomeModal from '@/components/WelcomeModal'
@@ -13,6 +14,8 @@ export default async function HomePage() {
   const isAuthenticated = !!session?.user
 
   let showWelcome = false
+  const bookmarkSet = currentUserId ? await getUserBookmarkSet(currentUserId) : null
+
   if (currentUserId) {
     const user = await db.user.findUnique({
       where: { id: currentUserId },
@@ -54,6 +57,9 @@ export default async function HomePage() {
           isAuthenticated={isAuthenticated}
           isHome
           limitAnswers={3}
+          isQuestionBookmarked={bookmarkSet?.questionIds.has(question.id)}
+          bookmarkedAnswerIds={bookmarkSet ? Array.from(bookmarkSet.answerIds) : []}
+          bookmarkedCommentIds={bookmarkSet ? Array.from(bookmarkSet.commentIds) : []}
         />
       </div>
       <div className="max-w-2xl mx-auto mt-4 pb-8">

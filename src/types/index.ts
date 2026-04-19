@@ -1,6 +1,6 @@
-import { Role, QuestionStatus, VoteTarget, ReportTarget, ReportStatus } from '@prisma/client'
+import { Role, QuestionStatus, VoteTarget, ReportTarget, ReportStatus, BookmarkTargetType } from '@prisma/client'
 
-export type { Role, QuestionStatus, VoteTarget, ReportTarget, ReportStatus }
+export type { Role, QuestionStatus, VoteTarget, ReportTarget, ReportStatus, BookmarkTargetType }
 
 export interface UserSession {
   id: string

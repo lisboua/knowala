@@ -44,16 +44,7 @@ export async function POST(req: NextRequest) {
       )
     }
 
-    // Rate limit check
-    const rateLimitResult = await rateLimitAnswer(session.user.id, questionId)
-    if (!rateLimitResult.success) {
-      return NextResponse.json(
-        { success: false, error: 'Você já respondeu esta pergunta.' },
-        { status: 429 }
-      )
-    }
-
-    // Content filter
+    // Content filter (must run before rate limit to avoid burning the counter on invalid content)
     const sanitized = sanitizeText(content)
     const filterResult = filterContent(sanitized)
 
@@ -61,6 +52,15 @@ export async function POST(req: NextRequest) {
       return NextResponse.json(
         { success: false, error: filterResult.reason },
         { status: 400 }
+      )
+    }
+
+    // Rate limit check (runs after content filter so invalid submissions don't consume the slot)
+    const rateLimitResult = await rateLimitAnswer(session.user.id, questionId)
+    if (!rateLimitResult.success) {
+      return NextResponse.json(
+        { success: false, error: 'Você já respondeu esta pergunta.' },
+        { status: 429 }
       )
     }
 

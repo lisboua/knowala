@@ -1,10 +1,12 @@
 import Link from 'next/link'
+import BookmarkButton from '@/components/BookmarkButton'
 import { QuestionWithAnswers } from '@/types'
 
 interface QuestionCardProps {
   question: QuestionWithAnswers
-  /** When true, the title is a link to the question's permalink */
   isHome?: boolean
+  isBookmarked?: boolean
+  isAuthenticated?: boolean
 }
 
 function formatDate(date: Date): string {
@@ -17,7 +19,7 @@ function formatDate(date: Date): string {
   }).format(date)
 }
 
-export default function QuestionCard({ question, isHome = false }: QuestionCardProps) {
+export default function QuestionCard({ question, isHome = false, isBookmarked = false, isAuthenticated = false }: QuestionCardProps) {
   const publishedDate = question.publishedAt ? formatDate(new Date(question.publishedAt)) : null
   const answersCount = question.answers.length
   const permalink = question.slug ? `/pergunta/${question.slug}` : null
@@ -56,6 +58,15 @@ export default function QuestionCard({ question, isHome = false }: QuestionCardP
             link permanente
           </Link>
         )}
+
+        <div className="ml-auto">
+          <BookmarkButton
+            targetType="QUESTION"
+            targetId={question.id}
+            initialIsBookmarked={isBookmarked}
+            isAuthenticated={isAuthenticated}
+          />
+        </div>
       </div>
     </div>
   )

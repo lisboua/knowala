@@ -4,6 +4,7 @@ import { useState, useRef } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import VoteButtons from './VoteButtons'
+import BookmarkButton from './BookmarkButton'
 import CommentForm from './CommentForm'
 import Modal from './ui/Modal'
 import Button from './ui/Button'
@@ -14,6 +15,7 @@ interface CommentProps {
   currentUserId?: string
   isAuthenticated: boolean
   depth?: number
+  isBookmarked?: boolean
 }
 
 function formatRelativeTime(date: Date): string {
@@ -48,6 +50,7 @@ export default function Comment({
   currentUserId,
   isAuthenticated,
   depth = 0,
+  isBookmarked = false,
 }: CommentProps) {
   const [showReplyForm, setShowReplyForm] = useState(false)
   const [showReportModal, setShowReportModal] = useState(false)
@@ -258,14 +261,22 @@ export default function Comment({
               Editar
             </button>
           )}
-          {isAuthenticated && comment.userId !== currentUserId && (
-            <button
-              onClick={() => setShowReportModal(true)}
-              className="text-xs text-[var(--text-secondary)] hover:text-red-400 transition-colors"
-            >
-              Denunciar
-            </button>
-          )}
+          <div className="flex items-center gap-3 ml-auto">
+            <BookmarkButton
+              targetType="COMMENT"
+              targetId={comment.id}
+              initialIsBookmarked={isBookmarked}
+              isAuthenticated={isAuthenticated}
+            />
+            {isAuthenticated && comment.userId !== currentUserId && (
+              <button
+                onClick={() => setShowReportModal(true)}
+                className="text-xs text-[var(--text-secondary)] hover:text-red-400 transition-colors"
+              >
+                Denunciar
+              </button>
+            )}
+          </div>
         </div>
 
         {/* Reply form */}

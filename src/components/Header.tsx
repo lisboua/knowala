@@ -6,6 +6,7 @@ import { useState } from 'react'
 import Image from 'next/image'
 import { useTheme, type Theme } from '@/contexts/ThemeContext'
 import NotificationBell from '@/components/NotificationBell'
+import SearchBar from '@/components/SearchBar'
 
 const themeOptions: { value: Theme; label: string; icon: React.ReactNode }[] = [
   {
@@ -44,7 +45,7 @@ export default function Header() {
 
   return (
     <header className="sticky top-0 z-40 backdrop-blur-md bg-[var(--bg-primary)]/90 border-b border-[var(--border)]">
-      <div className="max-w-5xl mx-auto px-4 h-16 flex items-center justify-between">
+      <div className="max-w-5xl mx-auto px-4 h-16 grid grid-cols-[auto_1fr_auto] items-center gap-4">
         {/* Logo */}
         <Link href="/" className="flex items-center gap-1.5 text-[#818CF8] font-extrabold text-xl tracking-tight hover:opacity-80 transition-opacity">
           <Image
@@ -54,9 +55,12 @@ export default function Header() {
             height={32}
             className="h-8 w-8 object-contain"
           />
-          Knowala
+          <span className="hidden sm:block">Knowala</span>
         </Link>
 
+        <div className="flex justify-center">
+          <SearchBar />
+        </div>
 
         {/* Nav */}
         <nav className="flex items-center gap-2">
@@ -116,6 +120,16 @@ export default function Header() {
                       Meu Perfil
                     </Link>
                     <div className="border-t border-[var(--border)]">
+                      <Link
+                        href="/guardados"
+                        className="flex items-center gap-2 px-3 py-2 text-sm text-[var(--text-primary)] hover:bg-[var(--bg-hover)] transition-colors"
+                        onClick={() => setMenuOpen(false)}
+                      >
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 3a2 2 0 00-2 2v16l7-3 7 3V5a2 2 0 00-2-2H5z" />
+                        </svg>
+                        Guardados
+                      </Link>
                       <Link
                         href="/arquivo"
                         className="flex items-center gap-2 px-3 py-2 text-sm text-[var(--text-primary)] hover:bg-[var(--bg-hover)] transition-colors"

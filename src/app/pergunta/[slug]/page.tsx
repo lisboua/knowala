@@ -2,6 +2,7 @@ import { notFound } from 'next/navigation'
 import { Metadata } from 'next'
 import { auth } from '@/lib/auth'
 import { getQuestionBySlug } from '@/lib/questions'
+import { getUserBookmarkSet } from '@/lib/bookmarks'
 import QuestionView from '@/components/QuestionView'
 
 interface Props {
@@ -41,12 +42,16 @@ export default async function QuestionPage({ params }: Props) {
 
   const currentUserId = session?.user?.id
   const isAuthenticated = !!session?.user
+  const bookmarkSet = currentUserId ? await getUserBookmarkSet(currentUserId) : null
 
   return (
     <QuestionView
       question={question}
       currentUserId={currentUserId}
       isAuthenticated={isAuthenticated}
+      isQuestionBookmarked={bookmarkSet?.questionIds.has(question.id)}
+      bookmarkedAnswerIds={bookmarkSet ? Array.from(bookmarkSet.answerIds) : []}
+      bookmarkedCommentIds={bookmarkSet ? Array.from(bookmarkSet.commentIds) : []}
     />
   )
 }

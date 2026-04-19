@@ -10,16 +10,19 @@ interface QuestionViewProps {
   isAuthenticated: boolean
   isHome?: boolean
   limitAnswers?: number
+  isQuestionBookmarked?: boolean
+  bookmarkedAnswerIds?: string[]
+  bookmarkedCommentIds?: string[]
 }
 
-export default function QuestionView({ question, currentUserId, isAuthenticated, isHome = false, limitAnswers }: QuestionViewProps) {
+export default function QuestionView({ question, currentUserId, isAuthenticated, isHome = false, limitAnswers, isQuestionBookmarked = false, bookmarkedAnswerIds = [], bookmarkedCommentIds = [] }: QuestionViewProps) {
   const hasAlreadyAnswered = question.answers.some((a) => a.userId === currentUserId)
   const displayedAnswers = limitAnswers ? question.answers.slice(0, limitAnswers) : question.answers
   const hasMore = limitAnswers != null && question.answers.length > limitAnswers
 
   return (
     <div className="max-w-2xl mx-auto">
-      <QuestionCard question={question} isHome={isHome} />
+      <QuestionCard question={question} isHome={isHome} isBookmarked={isQuestionBookmarked} isAuthenticated={isAuthenticated} />
 
       <div id="responder">
         <AnswerForm
@@ -50,6 +53,8 @@ export default function QuestionView({ question, currentUserId, isAuthenticated,
                 answer={answer}
                 currentUserId={currentUserId}
                 isAuthenticated={isAuthenticated}
+                isBookmarked={bookmarkedAnswerIds.includes(answer.id)}
+                bookmarkedCommentIds={bookmarkedCommentIds}
               />
             ))}
             {hasMore && question.slug && (

@@ -45,6 +45,7 @@ model User {
   inviteCodeUsed     InviteCode?  @relation("InviteCodeUsed")
   notifications      Notification[] @relation("NotificationRecipient")
   actorNotifications Notification[] @relation("NotificationActor")
+  bookmarks          Bookmark[]
 }
 
 enum Role {
@@ -61,7 +62,8 @@ model Question {
   status       QuestionStatus @default(DRAFT)
   createdAt    DateTime       @default(now())
 
-  answers Answer[]
+  answers   Answer[]
+  bookmarks Bookmark[]
 }
 
 enum QuestionStatus {
@@ -82,9 +84,10 @@ model Answer {
 
   user     User      @relation(fields: [userId], references: [id])
   question Question  @relation(fields: [questionId], references: [id])
-  comments Comment[]
-  votes    Vote[]    @relation("VoteAnswer")
-  reports  Report[]  @relation("ReportAnswer")
+  comments  Comment[]
+  votes     Vote[]     @relation("VoteAnswer")
+  reports   Report[]   @relation("ReportAnswer")
+  bookmarks Bookmark[]
 
   @@unique([userId, questionId])
 }
@@ -104,8 +107,9 @@ model Comment {
   answer  Answer    @relation(fields: [answerId], references: [id])
   parent  Comment?  @relation("CommentReplies", fields: [parentId], references: [id])
   replies Comment[] @relation("CommentReplies")
-  votes   Vote[]    @relation("VoteComment")
-  reports Report[]  @relation("ReportComment")
+  votes     Vote[]     @relation("VoteComment")
+  reports   Report[]   @relation("ReportComment")
+  bookmarks Bookmark[]
 }
 
 // Unified vote model - uses separate FK columns for answer and comment
@@ -263,6 +267,33 @@ enum NotificationType {
   MILESTONE
   BADGE_EARNED
   DAILY_QUESTION
+}
+
+// ===== Bookmarks =====
+
+model Bookmark {
+  id         String             @id @default(cuid())
+  userId     String
+  targetType BookmarkTargetType
+  questionId String?
+  answerId   String?
+  commentId  String?
+  createdAt  DateTime           @default(now())
+
+  user     User      @relation(fields: [userId], references: [id])
+  question Question? @relation(fields: [questionId], references: [id])
+  answer   Answer?   @relation(fields: [answerId], references: [id])
+  comment  Comment?  @relation(fields: [commentId], references: [id])
+
+  @@unique([userId, questionId, targetType])
+  @@unique([userId, answerId, targetType])
+  @@unique([userId, commentId, targetType])
+}
+
+enum BookmarkTargetType {
+  QUESTION
+  ANSWER
+  COMMENT
 }
 
 // ===== Beta / Invite System =====

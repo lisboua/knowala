@@ -4,6 +4,7 @@ import { useState, useRef } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import VoteButtons from './VoteButtons'
+import BookmarkButton from './BookmarkButton'
 import Comment from './Comment'
 import CommentForm from './CommentForm'
 import Modal from './ui/Modal'
@@ -14,6 +15,8 @@ interface AnswerProps {
   answer: AnswerWithRelations
   currentUserId?: string
   isAuthenticated: boolean
+  isBookmarked?: boolean
+  bookmarkedCommentIds?: string[]
 }
 
 function formatRelativeTime(date: Date): string {
@@ -43,7 +46,7 @@ function getUserVote(
   return vote ? vote.value : null
 }
 
-export default function Answer({ answer, currentUserId, isAuthenticated }: AnswerProps) {
+export default function Answer({ answer, currentUserId, isAuthenticated, isBookmarked = false, bookmarkedCommentIds = [] }: AnswerProps) {
   const [showComments, setShowComments] = useState(false)
   const [showCommentForm, setShowCommentForm] = useState(false)
   const [showReportModal, setShowReportModal] = useState(false)
@@ -265,14 +268,22 @@ export default function Answer({ answer, currentUserId, isAuthenticated }: Answe
               Editar
             </button>
           )}
-          {isAuthenticated && answer.userId !== currentUserId && (
-            <button
-              onClick={() => setShowReportModal(true)}
-              className="text-[var(--text-secondary)] hover:text-red-400 transition-colors ml-auto"
-            >
-              Denunciar
-            </button>
-          )}
+          <div className="flex items-center gap-3 ml-auto">
+            <BookmarkButton
+              targetType="ANSWER"
+              targetId={answer.id}
+              initialIsBookmarked={isBookmarked}
+              isAuthenticated={isAuthenticated}
+            />
+            {isAuthenticated && answer.userId !== currentUserId && (
+              <button
+                onClick={() => setShowReportModal(true)}
+                className="text-[var(--text-secondary)] hover:text-red-400 transition-colors"
+              >
+                Denunciar
+              </button>
+            )}
+          </div>
         </div>
 
         {/* Comments section */}
@@ -296,6 +307,7 @@ export default function Answer({ answer, currentUserId, isAuthenticated }: Answe
                   comment={comment}
                   currentUserId={currentUserId}
                   isAuthenticated={isAuthenticated}
+                  isBookmarked={bookmarkedCommentIds.includes(comment.id)}
                 />
               ))}
               {topComments.length === 0 && !showCommentForm && (
