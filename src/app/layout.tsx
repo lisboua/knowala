@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import Link from 'next/link'
 import { Inter } from 'next/font/google'
 import { SessionProvider } from 'next-auth/react'
 import Header from '@/components/Header'
@@ -58,6 +59,11 @@ export default function RootLayout({
               <div className="max-w-5xl mx-auto px-4 text-center text-xs text-[var(--text-secondary)] tracking-wide">
                 <p>© {new Date().getFullYear()} Knowala · Feito com ❤️ no Brasil</p>
                 <p className="mt-1.5">Horário de Brasília (UTC-3) · Nova pergunta todo dia às 08:00</p>
+                <p className="mt-2">
+                  <Link href="/changelog" className="hover:text-[var(--text-primary)] transition-colors">
+                    Novidades
+                  </Link>
+                </p>
               </div>
             </footer>
           </SessionProvider>

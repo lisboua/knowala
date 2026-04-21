@@ -57,12 +57,38 @@ export async function getQuestionBySlug(slug: string): Promise<QuestionWithAnswe
   return sortAnswersByScore(question as QuestionWithAnswers)
 }
 
-export async function getArchivedQuestions(page: number = 1, limit: number = 20) {
+export async function getUserAnsweredQuestionIds(userId: string): Promise<Set<string>> {
+  const answers = await db.answer.findMany({
+    where: { userId },
+    select: { questionId: true },
+  })
+  return new Set(answers.map(a => a.questionId))
+}
+
+export type ArchivedQuestionsFilter = 'todas' | 'respondidas' | 'nao-respondidas'
+
+export async function getArchivedQuestions(
+  page: number = 1,
+  limit: number = 20,
+  filter: ArchivedQuestionsFilter = 'todas',
+  answeredIds?: Set<string>
+) {
   const skip = (page - 1) * limit
+
+  const baseWhere = { status: 'PUBLISHED' as const, slug: { not: null } }
+
+  let filterWhere = {}
+  if (filter === 'respondidas' && answeredIds) {
+    filterWhere = { id: { in: Array.from(answeredIds) } }
+  } else if (filter === 'nao-respondidas' && answeredIds) {
+    filterWhere = { id: { notIn: Array.from(answeredIds) } }
+  }
+
+  const where = { ...baseWhere, ...filterWhere }
 
   const [questions, total] = await Promise.all([
     db.question.findMany({
-      where: { status: 'PUBLISHED', slug: { not: null } },
+      where,
       orderBy: { publishedAt: 'desc' },
       skip,
       take: limit,
@@ -74,9 +100,7 @@ export async function getArchivedQuestions(page: number = 1, limit: number = 20)
         _count: { select: { answers: true } },
       },
     }),
-    db.question.count({
-      where: { status: 'PUBLISHED', slug: { not: null } },
-    }),
+    db.question.count({ where }),
   ])
 
   return {
