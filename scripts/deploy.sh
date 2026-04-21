@@ -61,6 +61,9 @@ ssh $SSH_OPTS "$SERVER_USER@$SERVER_IP" "
   # Aplica migrations pendentes
   npx prisma migrate deploy
 
+  # Sincroniza badges (upsert seguro, nunca deleta dados)
+  npx prisma db seed
+
   # Build da aplicação
   npm run build
 

@@ -4,12 +4,15 @@ import { notifyBadgeEarned } from '@/lib/notifications'
 import { BadgeData } from '@/types'
 
 export const BADGE_DEFINITIONS: BadgeData[] = [
+  // ── Onboarding ──────────────────────────────────────────────────
   {
     key: 'welcome',
     name: 'Bem-vindo',
     description: 'Postou sua primeira resposta',
     icon: '🌱',
   },
+
+  // ── Streak ──────────────────────────────────────────────────────
   {
     key: 'perfect_week',
     name: 'Semana Perfeita',
@@ -22,18 +25,122 @@ export const BADGE_DEFINITIONS: BadgeData[] = [
     description: 'Respondeu por 30 dias consecutivos',
     icon: '💪',
   },
+
+  // ── Respostas postadas ───────────────────────────────────────────
+  {
+    key: 'regular',
+    name: 'Assíduo',
+    description: 'Postou 10 ou mais respostas',
+    icon: '📝',
+  },
+  {
+    key: 'contributor',
+    name: 'Colaborador',
+    description: 'Postou 50 ou mais respostas',
+    icon: '📚',
+  },
+  {
+    key: 'expert',
+    name: 'Expert',
+    description: 'Postou 200 ou mais respostas',
+    icon: '🎯',
+  },
+
+  // ── Comentários ─────────────────────────────────────────────────
+  {
+    key: 'participant',
+    name: 'Participante',
+    description: 'Postou 10 ou mais comentários',
+    icon: '💬',
+  },
   {
     key: 'debater',
     name: 'Debatedor',
-    description: 'Postou mais de 50 comentários',
-    icon: '💬',
+    description: 'Postou 50 ou mais comentários',
+    icon: '🗨️',
+  },
+  {
+    key: 'orator',
+    name: 'Orador',
+    description: 'Postou 200 ou mais comentários',
+    icon: '🗣️',
+  },
+
+  // ── Qualidade das respostas ──────────────────────────────────────
+  {
+    key: 'well_received',
+    name: 'Bem Recebido',
+    description: 'Uma resposta com 10 ou mais upvotes',
+    icon: '✨',
+  },
+  {
+    key: 'highlight',
+    name: 'Destaque',
+    description: '3 respostas diferentes com 10 ou mais upvotes cada',
+    icon: '🏅',
+  },
+  {
+    key: 'spark',
+    name: 'Faísca',
+    description: 'Uma resposta com 5 ou mais comentários',
+    icon: '💡',
+  },
+
+  // ── Upvotes recebidos ────────────────────────────────────────────
+  {
+    key: 'appreciated',
+    name: 'Apreciado',
+    description: 'Recebeu 10 ou mais upvotes no total',
+    icon: '💎',
+  },
+  {
+    key: 'recognized',
+    name: 'Reconhecido',
+    description: 'Recebeu 50 ou mais upvotes no total',
+    icon: '🌟',
   },
   {
     key: 'influential',
     name: 'Influente',
-    description: 'Recebeu mais de 100 upvotes no total',
+    description: 'Recebeu 100 ou mais upvotes no total',
     icon: '⭐',
   },
+
+  // ── Upvotes dados ────────────────────────────────────────────────
+  {
+    key: 'attentive',
+    name: 'Atento',
+    description: 'Deu 10 ou mais upvotes para outros usuários',
+    icon: '👀',
+  },
+  {
+    key: 'supporter',
+    name: 'Apoiador',
+    description: 'Deu 50 ou mais upvotes para outros usuários',
+    icon: '👍',
+  },
+  {
+    key: 'generous',
+    name: 'Generoso',
+    description: 'Deu 200 ou mais upvotes para outros usuários',
+    icon: '🎖️',
+  },
+
+  // ── Convites ─────────────────────────────────────────────────────
+  {
+    key: 'connector',
+    name: 'Conector',
+    description: 'Convidou pelo menos 1 usuário que se cadastrou',
+    icon: '🤝',
+  },
+  {
+    key: 'ambassador',
+    name: 'Embaixador',
+    description: 'Convidou 5 ou mais usuários que se cadastraram',
+    icon: '🌐',
+  },
+
+  // ── Tempo de casa ────────────────────────────────────────────────
   {
     key: 'pioneer',
     name: 'Pioneiro',
@@ -45,12 +152,6 @@ export const BADGE_DEFINITIONS: BadgeData[] = [
     name: 'Veterano',
     description: 'Conta com mais de 1 ano de existência',
     icon: '🏆',
-  },
-  {
-    key: 'well_received',
-    name: 'Bem Recebido',
-    description: 'Uma resposta com 10 ou mais upvotes',
-    icon: '✨',
   },
 ]
 
@@ -77,7 +178,7 @@ export async function awardBadge(userId: string, badgeKey: string): Promise<void
   }
 }
 
-export async function checkAndAwardBadges(userId: string): Promise<void> {
+export async function checkAndAwardBadges(userId: string, notify = true): Promise<void> {
   const user = await db.user.findUnique({
     where: { id: userId },
     include: {
@@ -100,18 +201,25 @@ export async function checkAndAwardBadges(userId: string): Promise<void> {
   const existingBadgeKeys = new Set(user.badges.map((ub) => ub.badge.key))
   const badgesToAward: string[] = []
 
-  // welcome: First answer posted
-  if (user.answers.length >= 1 && !existingBadgeKeys.has('welcome')) {
+  const check = (key: string) => !existingBadgeKeys.has(key)
+
+  // ── Onboarding ──────────────────────────────────────────────────
+  if (check('welcome') && user.answers.length >= 1) {
     badgesToAward.push('welcome')
   }
 
-  // debater: 50+ comments
-  if (user.comments.length >= 50 && !existingBadgeKeys.has('debater')) {
-    badgesToAward.push('debater')
-  }
+  // ── Respostas postadas ───────────────────────────────────────────
+  if (check('regular') && user.answers.length >= 10) badgesToAward.push('regular')
+  if (check('contributor') && user.answers.length >= 50) badgesToAward.push('contributor')
+  if (check('expert') && user.answers.length >= 200) badgesToAward.push('expert')
 
-  // influential: 100+ upvotes received total
-  if (!existingBadgeKeys.has('influential')) {
+  // ── Comentários ─────────────────────────────────────────────────
+  if (check('participant') && user.comments.length >= 10) badgesToAward.push('participant')
+  if (check('debater') && user.comments.length >= 50) badgesToAward.push('debater')
+  if (check('orator') && user.comments.length >= 200) badgesToAward.push('orator')
+
+  // ── Upvotes recebidos ────────────────────────────────────────────
+  if (check('appreciated') || check('recognized') || check('influential')) {
     const totalUpvotes = await db.vote.count({
       where: {
         value: 1,
@@ -121,65 +229,94 @@ export async function checkAndAwardBadges(userId: string): Promise<void> {
         ],
       },
     })
-    if (totalUpvotes >= 100) {
-      badgesToAward.push('influential')
-    }
+    if (check('appreciated') && totalUpvotes >= 10) badgesToAward.push('appreciated')
+    if (check('recognized') && totalUpvotes >= 50) badgesToAward.push('recognized')
+    if (check('influential') && totalUpvotes >= 100) badgesToAward.push('influential')
   }
 
-  // pioneer: Among first 500 users
-  if (!existingBadgeKeys.has('pioneer')) {
-    const userCount = await db.user.count({
-      where: { createdAt: { lte: user.createdAt } },
-    })
-    if (userCount <= 500) {
-      badgesToAward.push('pioneer')
-    }
-  }
+  // ── Qualidade por resposta ───────────────────────────────────────
+  const needsPerAnswerCheck =
+    (check('well_received') || check('highlight') || check('spark')) && user.answers.length > 0
 
-  // veteran: Account 1 year old
-  if (!existingBadgeKeys.has('veteran')) {
-    const oneYearAgo = new Date()
-    oneYearAgo.setFullYear(oneYearAgo.getFullYear() - 1)
-    if (user.createdAt <= oneYearAgo) {
-      badgesToAward.push('veteran')
-    }
-  }
+  if (needsPerAnswerCheck) {
+    let answersWithHighUpvotes = 0
 
-  // well_received: Single answer with 10+ upvotes
-  if (!existingBadgeKeys.has('well_received') && user.answers.length > 0) {
     for (const answer of user.answers) {
-      const upvoteCount = await db.vote.count({
-        where: { answerId: answer.id, targetType: 'ANSWER', value: 1 },
-      })
-      if (upvoteCount >= 10) {
-        badgesToAward.push('well_received')
-        break
+      const [upvoteCount, commentCount] = await Promise.all([
+        check('well_received') || check('highlight')
+          ? db.vote.count({ where: { answerId: answer.id, targetType: 'ANSWER', value: 1 } })
+          : Promise.resolve(0),
+        check('spark')
+          ? db.comment.count({ where: { answerId: answer.id, deletedByMod: false } })
+          : Promise.resolve(0),
+      ])
+
+      if (upvoteCount >= 10) answersWithHighUpvotes++
+
+      if (check('spark') && commentCount >= 5) {
+        badgesToAward.push('spark')
+        existingBadgeKeys.add('spark') // prevent duplicate push
       }
     }
+
+    if (check('well_received') && answersWithHighUpvotes >= 1) {
+      badgesToAward.push('well_received')
+    }
+    if (check('highlight') && answersWithHighUpvotes >= 3) {
+      badgesToAward.push('highlight')
+    }
   }
 
-  // perfect_week and consistent_month: streak-based
-  const currentStreak = await getCurrentStreak(userId)
-
-  if (currentStreak >= 7 && !existingBadgeKeys.has('perfect_week')) {
-    badgesToAward.push('perfect_week')
+  // ── Upvotes dados ────────────────────────────────────────────────
+  if (check('attentive') || check('supporter') || check('generous')) {
+    const upvotesGiven = await db.vote.count({ where: { userId, value: 1 } })
+    if (check('attentive') && upvotesGiven >= 10) badgesToAward.push('attentive')
+    if (check('supporter') && upvotesGiven >= 50) badgesToAward.push('supporter')
+    if (check('generous') && upvotesGiven >= 200) badgesToAward.push('generous')
   }
 
-  if (currentStreak >= 30 && !existingBadgeKeys.has('consistent_month')) {
-    badgesToAward.push('consistent_month')
+  // ── Convites ─────────────────────────────────────────────────────
+  if (check('connector') || check('ambassador')) {
+    const successfulInvites = await db.inviteCode.count({
+      where: { createdById: userId, usedById: { not: null } },
+    })
+    if (check('connector') && successfulInvites >= 1) badgesToAward.push('connector')
+    if (check('ambassador') && successfulInvites >= 5) badgesToAward.push('ambassador')
   }
 
-  // Award all earned badges and send notifications
+  // ── Pioneiro ─────────────────────────────────────────────────────
+  if (check('pioneer')) {
+    const userCount = await db.user.count({ where: { createdAt: { lte: user.createdAt } } })
+    if (userCount <= 500) badgesToAward.push('pioneer')
+  }
+
+  // ── Veterano ─────────────────────────────────────────────────────
+  if (check('veteran')) {
+    const oneYearAgo = new Date()
+    oneYearAgo.setFullYear(oneYearAgo.getFullYear() - 1)
+    if (user.createdAt <= oneYearAgo) badgesToAward.push('veteran')
+  }
+
+  // ── Streak ──────────────────────────────────────────────────────
+  if (check('perfect_week') || check('consistent_month')) {
+    const currentStreak = await getCurrentStreak(userId)
+    if (check('perfect_week') && currentStreak >= 7) badgesToAward.push('perfect_week')
+    if (check('consistent_month') && currentStreak >= 30) badgesToAward.push('consistent_month')
+  }
+
+  // ── Conceder badges ──────────────────────────────────────────────
   for (const badgeKey of badgesToAward) {
     await awardBadge(userId, badgeKey)
-    const badgeDef = BADGE_DEFINITIONS.find((b) => b.key === badgeKey)
-    if (badgeDef) {
-      notifyBadgeEarned({
-        userId,
-        badgeKey,
-        badgeName: badgeDef.name,
-        username: user.username,
-      }).catch(console.error)
+    if (notify) {
+      const badgeDef = BADGE_DEFINITIONS.find((b) => b.key === badgeKey)
+      if (badgeDef) {
+        notifyBadgeEarned({
+          userId,
+          badgeKey,
+          badgeName: badgeDef.name,
+          username: user.username,
+        }).catch(console.error)
+      }
     }
   }
 }
