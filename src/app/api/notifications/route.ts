@@ -13,7 +13,7 @@ export async function GET(req: NextRequest) {
   deleteExpiredNotifications().catch(console.error)
 
   const notifications = await db.notification.findMany({
-    where: { userId: session.user.id, expiresAt: { gt: new Date() } },
+    where: { userId: session.user.id, expiresAt: { gt: new Date() }, NOT: { type: 'DAILY_QUESTION' } },
     orderBy: { createdAt: 'desc' },
     take: 20,
     include: {
@@ -22,7 +22,7 @@ export async function GET(req: NextRequest) {
   })
 
   const unreadCount = await db.notification.count({
-    where: { userId: session.user.id, read: false, expiresAt: { gt: new Date() } },
+    where: { userId: session.user.id, read: false, expiresAt: { gt: new Date() }, NOT: { type: 'DAILY_QUESTION' } },
   })
 
   return NextResponse.json({ success: true, data: { notifications, unreadCount } })
