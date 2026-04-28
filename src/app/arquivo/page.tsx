@@ -20,7 +20,7 @@ function formatDate(date: Date | null): string {
     timeZone: 'America/Sao_Paulo',
     day: '2-digit',
     month: 'long',
-    year: 'numeric',
+    year: '2-digit',
   }).format(date)
 }
 
@@ -115,12 +115,7 @@ export default async function ArquivoPage({ searchParams }: Props) {
                     {isAuthenticated && answered && (
                       <>
                         <span>·</span>
-                        <span className="flex items-center gap-1 text-emerald-500">
-                          <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
-                          </svg>
-                          Respondida
-                        </span>
+                        <span className="text-emerald-500">Respondida</span>
                       </>
                     )}
                   </div>
