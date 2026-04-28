@@ -19,7 +19,7 @@ function formatDate(date: Date | null): string {
   return new Intl.DateTimeFormat('pt-BR', {
     timeZone: 'America/Sao_Paulo',
     day: '2-digit',
-    month: 'long',
+    month: '2-digit',
     year: '2-digit',
   }).format(date)
 }
