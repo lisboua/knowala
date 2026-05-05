@@ -9,7 +9,7 @@ import { z } from 'zod'
 
 const answerSchema = z.object({
   content: z.string().min(10, 'Resposta muito curta (mínimo 10 caracteres).').max(5000, 'Resposta muito longa (máximo 5000 caracteres).'),
-  questionId: z.string().cuid('ID de pergunta inválido.'),
+  questionId: z.string().min(1, 'ID de pergunta inválido.'),
 })
 
 export async function POST(req: NextRequest) {

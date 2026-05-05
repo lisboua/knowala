@@ -8,9 +8,10 @@ interface AnswerFormProps {
   questionId: string
   isAuthenticated: boolean
   hasAlreadyAnswered: boolean
+  isHome?: boolean
 }
 
-export default function AnswerForm({ questionId, isAuthenticated, hasAlreadyAnswered }: AnswerFormProps) {
+export default function AnswerForm({ questionId, isAuthenticated, hasAlreadyAnswered, isHome = false }: AnswerFormProps) {
   const router = useRouter()
   const [content, setContent] = useState('')
   const [error, setError] = useState<string | null>(null)
@@ -19,6 +20,10 @@ export default function AnswerForm({ questionId, isAuthenticated, hasAlreadyAnsw
   const [showAuthOptions, setShowAuthOptions] = useState(false)
   const [isPending, startTransition] = useTransition()
   const textareaRef = useRef<HTMLTextAreaElement>(null)
+
+  const placeholder = isHome
+    ? 'Compartilhe sua perspectiva sobre a pergunta de hoje...'
+    : 'Compartilhe sua perspectiva sobre essa pergunta...'
 
   if (hasAlreadyAnswered) {
     return (
@@ -55,7 +60,7 @@ export default function AnswerForm({ questionId, isAuthenticated, hasAlreadyAnsw
             onClick={() => setShowAuthOptions(true)}
             className="w-full text-left px-4 py-3 text-sm text-[var(--text-secondary)] hover:bg-[var(--bg-hover)] transition-colors"
           >
-            Compartilhe sua perspectiva sobre a pergunta de hoje...
+            {placeholder}
           </button>
         ) : (
           <div className="px-4 py-3 bg-[var(--bg-card)]">
@@ -135,7 +140,7 @@ export default function AnswerForm({ questionId, isAuthenticated, hasAlreadyAnsw
           onClick={handleCollapsedClick}
           className="w-full text-left px-4 py-3 text-sm text-[var(--text-secondary)] hover:bg-[var(--bg-hover)] transition-colors"
         >
-          Compartilhe sua perspectiva sobre a pergunta de hoje...
+          {placeholder}
         </button>
       ) : (
         <form onSubmit={handleSubmit} className="bg-[var(--bg-card)]">
@@ -147,7 +152,7 @@ export default function AnswerForm({ questionId, isAuthenticated, hasAlreadyAnsw
               e.target.style.height = 'auto'
               e.target.style.height = e.target.scrollHeight + 'px'
             }}
-            placeholder="Compartilhe sua perspectiva sobre a pergunta de hoje..."
+            placeholder={placeholder}
             rows={5}
             maxLength={5000}
             className="w-full bg-[var(--bg-primary)] px-4 py-3 text-sm text-[var(--text-primary)] placeholder-[var(--text-secondary)] focus:outline-none resize-none border-b border-[var(--border)] overflow-hidden"

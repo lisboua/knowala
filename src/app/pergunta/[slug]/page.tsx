@@ -1,7 +1,7 @@
 import { notFound } from 'next/navigation'
 import { Metadata } from 'next'
 import { auth } from '@/lib/auth'
-import { getQuestionBySlug } from '@/lib/questions'
+import { getQuestionBySlug, getAdjacentQuestions } from '@/lib/questions'
 import { getUserBookmarkSet } from '@/lib/bookmarks'
 import QuestionView from '@/components/QuestionView'
 
@@ -42,7 +42,11 @@ export default async function QuestionPage({ params }: Props) {
 
   const currentUserId = session?.user?.id
   const isAuthenticated = !!session?.user
-  const bookmarkSet = currentUserId ? await getUserBookmarkSet(currentUserId) : null
+
+  const [bookmarkSet, adjacent] = await Promise.all([
+    currentUserId ? getUserBookmarkSet(currentUserId) : Promise.resolve(null),
+    question.publishedAt ? getAdjacentQuestions(question.publishedAt, question.slug!) : Promise.resolve({ prev: null, next: null }),
+  ])
 
   return (
     <QuestionView
@@ -52,6 +56,8 @@ export default async function QuestionPage({ params }: Props) {
       isQuestionBookmarked={bookmarkSet?.questionIds.has(question.id)}
       bookmarkedAnswerIds={bookmarkSet ? Array.from(bookmarkSet.answerIds) : []}
       bookmarkedCommentIds={bookmarkSet ? Array.from(bookmarkSet.commentIds) : []}
+      prevQuestion={adjacent.prev}
+      nextQuestion={adjacent.next}
     />
   )
 }

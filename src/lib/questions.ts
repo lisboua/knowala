@@ -57,6 +57,33 @@ export async function getQuestionBySlug(slug: string): Promise<QuestionWithAnswe
   return sortAnswersByScore(question as QuestionWithAnswers)
 }
 
+export type AdjacentQuestion = { slug: string; content: string } | null
+
+export async function getAdjacentQuestions(
+  publishedAt: Date,
+  currentSlug: string
+): Promise<{ prev: AdjacentQuestion; next: AdjacentQuestion }> {
+  const baseWhere = { status: 'PUBLISHED' as const, slug: { not: null } }
+
+  const [prev, next] = await Promise.all([
+    db.question.findFirst({
+      where: { ...baseWhere, publishedAt: { lt: publishedAt }, slug: { not: currentSlug } },
+      orderBy: { publishedAt: 'desc' },
+      select: { slug: true, content: true },
+    }),
+    db.question.findFirst({
+      where: { ...baseWhere, publishedAt: { gt: publishedAt }, slug: { not: currentSlug } },
+      orderBy: { publishedAt: 'asc' },
+      select: { slug: true, content: true },
+    }),
+  ])
+
+  return {
+    prev: prev?.slug ? { slug: prev.slug, content: prev.content } : null,
+    next: next?.slug ? { slug: next.slug, content: next.content } : null,
+  }
+}
+
 export async function getUserAnsweredQuestionIds(userId: string): Promise<Set<string>> {
   const answers = await db.answer.findMany({
     where: { userId },
